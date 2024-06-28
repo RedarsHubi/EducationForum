@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% block title %}Home - {{ block.super }}{% endblock %}
+{% block content %}
+    {% if messages %}
+        <div class="messages-container">
+            {% for message in messages %}
+                <div class="message-text">{{ message }}</div>
+            {% endfor %}
+        </div>
+    {% endif %}
+    <div class="section-container">
+        {% for section in sections %}
+            <div class="section">
+                <h3>{{ section.name }}</h3>
+                <div class="section-info">
+                    {% for category in categories %}
+                        {% if category.section_id == section.id %}
+                            <div class="category">                        
+                                <div class="category-info">
+                                    <a href="{% url 'threads' %}?category={{ category.id }}">{{ category.name }}</a>
+                                </div>
+                                <div class="total-info">
+                                    <p>Total Posts: {{ category.post_count }}</p>
+                                    <p>Total Threads: {{ category.thread_count }}</p>
+                                </div>
+                                <div class="latest-post-info">
+                                    {% if category.last_thread %}
+                                        <p>Latest Post: <a href="{% url 'thread_page' %}?thread={{ category.last_thread_id }}">{{ category.last_thread_name }}</a></p>
+                                        <p>{{ category.last_thread }}</p>
+                                        <p>By: <a href="{% url 'user' %}?id={{ category.last_thread_user_id }}">{{ category.last_thread_user_name }}</a></p>                                        
+                                    {% else %}
+                                        <p>No threads yet</p>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        {% endif %}
+                    {% endfor %}  
+                </div>                    
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}

@@ -1,0 +1,124 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Philosophy Forum{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'styles/base.css' %}">
+    <link rel="stylesheet" href="{% static 'styles/home.css' %}">
+    <link rel="stylesheet" href="{% static 'styles/inbox.css' %}">
+    <link rel="stylesheet" href="{% static 'styles/profile.css' %}">
+    <link rel="stylesheet" href="{% static 'styles/thread.css' %}">  
+    <link rel="stylesheet" href="{% static 'styles/chat.css' %}">
+    <link rel="stylesheet" href="{% static 'styles/edit.css' %}">
+    <link rel="stylesheet" href="{% static 'styles/search.css' %}">
+    <link rel="stylesheet" href="{% static 'styles/login-register.css' %}">
+    <link rel="stylesheet" href="{% static 'styles/report.css' %}">
+    <link rel="stylesheet" href="{% static 'styles/handle.css' %}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/emoji-picker-element/index.css">
+    <script src="https://cdn.jsdelivr.net/npm/emoji-picker-element/index.js" type="module"></script>
+
+    <script src="https://unpkg.com/htmx.org@1.8.6"></script>  
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">
+                <a href="{% url 'landing_page' %}">Philosophy Forum</a>
+            </div>
+            <ul>
+                <li><a href="{% url 'home' %}">Home</a></li>
+                {% if user.is_authenticated %}
+                <li>
+                    <a href="{% url 'inbox' %}" id="inbox-link" class="new-noti">
+                        <span id="unread-count" class="badge" style="display: none;"></span>
+                        Inbox                   
+                    </a>
+                </li>
+                    <li><a href="{% url 'profile' %}">Profile</a></li>
+                    {% if user.is_staff or user.is_superuser %}
+                    <li><a href="{% url 'reported_posts' %}">Reports</a></li>
+                    {% endif %}
+                    <li><a href="{% url 'logout' %}">Logout ({{ request.user.name }})</a></li>
+                {% else %}
+                    <li><a href="{% url 'login' %}">Login</a></li>
+                    <li><a href="{% url 'register' %}">Register</a></li>
+                {% endif %}
+            </ul>
+        </nav>
+        <div class="search-bar-container">
+            <input type="text" id="search-input" class="search-input" placeholder="Search...">
+            <div class="button-container">
+                <button id="search-button" class="search-button"></button>
+                <button id="filter-button" class="filter-button"></button>
+            </div>
+            <div id="search-results" class="search-results"></div>
+            <div id="suggestions-container" class="suggestions-container"></div>
+            <div id="filter-options" class="filter-options hidden">
+                <label for="filter-date">Date:</label>
+                <select id="filter-date">
+                    <option value="">Any</option>
+                    <option value="today">Today</option>
+                    <option value="this_week">This Week</option>
+                    <!-- Add more options as needed -->
+                </select>
+        
+                <label for="filter-section">Section:</label>
+                <select id="filter-section">
+                    <option value="">Any</option>
+                    {% for section in sections %}
+                    <option value="{{ section.name }}">{{ section.name }}</option>
+                    {% endfor %}
+                </select>
+        
+                <label for="filter-category">Category:</label>
+                <select id="filter-category">
+                    <option value="">Any</option>
+                    {% for section in sections %}
+                    {% for category in section.categories.all %}
+                    <option value="{{ category.name }}">{{ category.name }}</option>
+                    {% endfor %}
+                    {% endfor %}
+                </select>
+                <label for="filter-author">Author:</label>
+                <input type="text" id="filter-author" placeholder="Author name">
+            </div>
+        </div>            
+    </header>    
+    <main>
+        {% block content %}
+        {% endblock %}
+    </main>
+    <footer>
+        <p>&copy; 2024 Philosophy Forum. All rights reserved.</p>
+    </footer>
+    
+    <!-- Chat box -->
+    <div id="chat-box" class="chat-box">
+        <div id="chat-toggle" class="chat-toggle">
+            <button id="toggle-chat" class="chat-toggle-button">
+                <i class="fas fa-comments"></i> Chat
+            </button>
+        </div>
+        <div id="chat-window" class="chat-window" style="display: none;">
+            <div id="chat-messages" class="chat-messages"></div>
+            <div class="chat-input-container">
+                <input type="text" id="chat-input" class="chat-input" placeholder="Type a message...">
+                <button id="send-chat" class="send-chat-button">
+                    <i class="fas fa-paper-plane"></i> Send
+                </button>
+            </div>
+        </div>
+    </div>
+    <!-- JavaScript for chat and search -->
+    <script src="{% static 'scripts/chat.js' %}"></script>
+    <script src="{% static 'scripts/search.js' %}"></script>
+    <script src="{% static 'scripts/searchStyle.js' %}"></script>
+    <script src="{% static 'scripts/count.js' %}"></script>
+    <script src="{% static 'scripts/inbox.js' %}"></script>
+</body>
+</html>
