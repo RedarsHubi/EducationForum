@@ -1,0 +1,100 @@
+/* Section Container Styles */
+.section-container {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  padding: 40px;
+}
+
+/* Section Styles */
+.section {
+  background-color: white;
+  padding: 30px;
+  border-radius: 20px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  animation: scaleIn 0.5s ease;
+}
+
+.section h3 {
+  font-size: 32px;
+  margin-bottom: 20px;
+  color: #000d6f;
+}
+
+.section-info {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 30px;
+  animation: fadeInUp 0.5s ease;
+}
+
+/* Category Styles */
+.category {
+  display: flex;
+  align-items: center;
+  flex: 1;
+  min-width: 300px;
+  padding: 20px;
+  background-color: gery;
+  border-radius: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s, box-shadow 0.3s;
+  color: #333;
+}
+
+.category:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+}
+
+.category-info a {
+  font-size: 24px;
+  color: #2242a2;
+  text-decoration: none;
+  transition: color 0.3s;
+}
+
+.category-info a:hover {
+  color: #011292;
+}
+
+.total-info,
+.latest-post-info {
+  flex: 1;
+  text-align: center;
+  animation: fadeInRight 0.5s ease;
+}
+
+.total-info p,
+.latest-post-info p {
+  margin: 5px 0;
+  color: #000;
+}
+
+.latest-post-info a {
+  color: #1a2ba8;
+  text-decoration: none;
+  transition: color 0.3s;
+}
+
+.latest-post-info a:hover {
+  color: #0116b4;
+}
+
+/* Messages Styles */
+.messages-container {
+  margin-bottom: 30px;
+  animation: fadeInUp 0.5s ease;
+}
+
+.message-text {
+  color: #e69999;
+  border-radius: 15px;
+  padding: 15px;
+  margin-bottom: 15px;
+  transition: all 0.3s ease-in-out;
+  cursor: pointer;
+  align-self: flex-start;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+  animation: slideInLeft 0.3s ease;
+ }
