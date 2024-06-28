@@ -1,5 +1,12 @@
 # Educational Forum Application Documentation
 
+## Authors
+
+- Malika Oubilla - Full Stack Developer
+- Reda Cherkoaui - Full Stack Developer
+
+Both authors contributed to all aspects of the project, including backend development, frontend design, database management, and deployment.
+
 ## 1. Introduction and System Overview
 
 ### 1.1 Purpose
