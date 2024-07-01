@@ -47,3 +47,30 @@ class ThreadForm(forms.ModelForm):
     class Meta:
         model = Thread
         fields = ['title', 'text', 'category']
+
+class PostForm(forms.ModelForm):
+    """ form in the admin page """
+    class Meta:
+        model = Post
+        fields = ['text']
+
+class MessageForm(forms.ModelForm):
+    class Meta:
+        model = Message
+        fields = ['content']
+        widgets = {
+            'content': forms.Textarea(attrs={'rows': 4, 'cols': 50, 'placeholder': 'Type your message here...'}),
+        }
+class RegisterForm(UserCreationForm):
+    email = forms.EmailField(required=True)
+
+    class Meta:
+        model = CustomUser
+        fields = ("name", "email", "password1", "password2")
+
+    def save(self, commit=True):
+        user = super(RegisterForm, self).save(commit=False)
+        user.email = self.cleaned_data["email"]
+        if commit:
+            user.save()
+        return user

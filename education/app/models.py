@@ -9,7 +9,6 @@ from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 
 
 class UserManager(BaseUserManager):
-    """Custom user manager for creating regular and superusers."""
     def create_user(self, email, password=None, **extra_fields):
         if not email:
             raise ValueError('The Email field must be set')
@@ -38,8 +37,7 @@ def validate_file_size(value):
     if value.size > max_size:
         raise ValidationError('File size cannot exceed 1MB.')
 
-class CustomUser(AbstractBaseUser):
-    """Represents a high-level section of the forum."""
+class CustomUser(AbstractBaseUser):  # Renamed to CustomUser
     email = models.EmailField(unique=True)
     name = models.CharField(max_length=100)
     bio = models.TextField(blank=True)
@@ -88,14 +86,12 @@ class CustomUser(AbstractBaseUser):
         self.save()
 
 class Section(models.Model):
-    """Represents a high-level section of the forum."""
     name = models.CharField(max_length=100)
 
     def __str__(self):
         return self.name
 
 class Category(models.Model):
-    """Represents a category within a section."""
     name = models.CharField(max_length=100)
     section = models.ForeignKey(Section, on_delete=models.CASCADE)
 
@@ -103,7 +99,6 @@ class Category(models.Model):
         return self.name
     
 class Thread(models.Model):
-    """Represents a discussion thread."""
     category = models.ForeignKey(Category, on_delete=models.SET_DEFAULT, default=12)
     title = models.CharField(max_length=200)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -116,7 +111,6 @@ class Thread(models.Model):
 
 
 class Post(models.Model):
-    """Represents a post within a thread."""
     thread = models.ForeignKey(Thread, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now_add=True)
@@ -173,7 +167,6 @@ class Post(models.Model):
         self.update_votes()
 
 class Vote(models.Model):
-    """Represents a vote on a post."""
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     post = models.ForeignKey('Post', on_delete=models.CASCADE)
     value = models.IntegerField(choices=[(-1, 'Downvote'), (1, 'Upvote')])
@@ -182,7 +175,6 @@ class Vote(models.Model):
         unique_together = [('user', 'post')]
 
 class Message(models.Model):
-    """Represents a private message between users."""
     sender = models.ForeignKey(CustomUser, related_name='sent_messages', on_delete=models.CASCADE)
     receiver = models.ForeignKey(CustomUser, related_name='received_messages', on_delete=models.CASCADE)
     content = models.TextField()
@@ -190,7 +182,6 @@ class Message(models.Model):
     is_read = models.BooleanField(default=False)
 
 class Report(models.Model):
-    """Represents a report of inappropriate content."""
     REASON_CHOICES = [
         ('harassment', 'Harassment or Hate Speech'),
         ('misinformation', 'Misinformation'),
