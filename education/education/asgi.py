@@ -8,9 +8,28 @@ https://docs.djangoproject.com/en/5.0/howto/deployment/asgi/
 """
 
 import os
-
-from django.core.asgi import get_asgi_application
-
+"""
+Defining the settings file path
+"""
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'education.settings')
 
-application = get_asgi_application()
+import django
+django.setup()
+
+from django.core.asgi import get_asgi_application
+from channels.routing import ProtocolTypeRouter, URLRouter
+from channels.auth import AuthMiddlewareStack
+from myproject.routing import websocket_urlpatterns
+
+"""
+ProtocolTypeRouter: Routes incoming requests based on their protocol type (HTTP or WebSocket).
+""""
+application = ProtocolTypeRouter({
+    "http": get_asgi_application(),
+    "websocket": AuthMiddlewareStack(
+        URLRouter(
+            websocket_urlpatterns
+          """ Note: Make sure to define websocket_urlpatterns in education/routing.py to specify WebSocket URL patterns."""
+        )
+    ),
+})
