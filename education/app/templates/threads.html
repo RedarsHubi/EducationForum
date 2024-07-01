@@ -1,0 +1,89 @@
+{% extends 'base.html' %}
+{% block content %}
+    <div class="navigation-bar">
+        <p><a href="{% url 'home' %}">{{ section_name }} > {{ category_name }}</a></p>
+    </div>
+
+    <!-- Thread Creation Form -->
+    <div class="thread-creation-container">
+        <h2>Create a New Thread</h2>
+        <form method="post" action="{% url 'thread_creation' %}">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="title">Title:</label>
+                <input type="text" id="title" name="title" required>
+            </div>
+            <div class="form-group">
+                <label for="text">Text:</label>
+                <textarea id="text" name="text" rows="5" required></textarea>
+                <button type="button" id="emoji-btn" class="btn btn-outline-primary">😀</button>
+                <div id="emoji-picker-container">
+                    <emoji-picker id="emoji-picker"></emoji-picker>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="category">Category:</label>
+                <select id="category" name="category">
+                    {% for category in categories %}
+                        <option value="{{ category.id }}">{{ category.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <button type="submit" class="create-button">Create Thread</button>
+        </form>
+    </div>
+
+    {% for thread in threads %}
+    <div class="thread-container">
+        <div class="thread-section">
+            <h3><a href="{% url 'thread_page' %}?thread={{ thread.id }}">{{ thread.title }}</a></h3>
+            <p>By: {{ thread.user_id.name }}</p>
+            <p>Created: {{ thread.created_at }}</p>
+        </div>
+        <div class="counts-section"> 
+            <p>Views: {{ thread.views }}</p>
+            <p>Posts: {{ thread.post_count }}</p>
+        </div>
+        <div class="last-post-section">
+            {% if thread.last_post_date %}
+                <p>Last post on: {{ thread.last_post_date }}</p>
+                <p>By: <a href="{% url 'user' %}?id={{ thread.last_post_user_id }}">{{ thread.last_post_user_name }}</a></p>                                
+            {% else %}
+                <p>No posts yet</p>
+            {% endif %}
+        </div>
+    </div>
+    {% endfor %}
+
+    <style>
+        #emoji-picker-container {
+            display: none;
+        }
+    </style>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const emojiBtn = document.getElementById('emoji-btn');
+        const emojiPickerContainer = document.getElementById('emoji-picker-container');
+        const emojiPicker = document.getElementById('emoji-picker');
+        const textArea = document.getElementById('text');
+
+        // Ensure the emoji picker container is hidden initially
+        emojiPickerContainer.style.display = 'none';
+
+        emojiBtn.addEventListener('click', () => {
+            if (emojiPickerContainer.style.display === 'none' || emojiPickerContainer.style.display === '') {
+                emojiPickerContainer.style.display = 'block';
+            } else {
+                emojiPickerContainer.style.display = 'none';
+            }
+        });
+
+        emojiPicker.addEventListener('emoji-click', (event) => {
+            textArea.value += event.detail.unicode;
+            emojiPickerContainer.style.display = 'none';
+        });
+    });
+</script>
+    
+{% endblock %}

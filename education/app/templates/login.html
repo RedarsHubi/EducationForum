@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% block title %}Login{% endblock %}
+{% block content %}
+<div class="login-container">
+    <div class="login-box">
+        <h2>Welcome Back</h2>
+        <p>Enter your credentials to access the philosophy forum.</p>
+        <form method="post" class="login-form">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="{{ form.username.id_for_label }}">Username</label>
+                {{ form.username }}
+            </div>
+            <div class="form-group">
+                <label for="{{ form.password.id_for_label }}">Password</label>
+                {{ form.password }}
+            </div>
+            <button type="submit" class="main-button"><b>Login</b></button>
+        </form>
+        <div class="register-link">
+            <p>Don't have an account?</p>
+            <a href="{% url 'register' %}">Register</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

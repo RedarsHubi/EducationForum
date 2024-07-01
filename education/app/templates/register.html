@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Register to Philosophy Forum{% endblock %}
+{% block content %}
+    <div class="register-container">
+        <div class="register-form-container">
+            <h1 class="register-title">User Registration</h1>
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+            <form method="post" class="register-form">
+                {% csrf_token %}
+                <div class="form-group">
+                    {{ form.name.label_tag }}
+                    {{ form.name }}
+                    {{ form.name.errors }}
+                </div>
+                <div class="form-group">
+                    {{ form.email.label_tag }}
+                    {{ form.email }}
+                    {{ form.email.errors }}
+                </div>
+                <div class="form-group">
+                    {{ form.password1.label_tag }}
+                    {{ form.password1 }}
+                    {{ form.password1.errors }}
+                </div>
+                <div class="form-group">
+                    {{ form.password2.label_tag }}
+                    {{ form.password2 }}
+                    {{ form.password2.errors }}
+                </div>
+                <button type="submit" class="register-button"><b>Register</b></button>
+            </form>
+        </div>
+    </div>
+{% endblock %}

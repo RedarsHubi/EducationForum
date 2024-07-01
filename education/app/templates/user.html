@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}{{ user.name }}'s Profile{% endblock %}
+{% block content %}
+    
+    <!-- Profile card -->
+<div class="profile-card">
+{% if user and user.id != 8 %}
+    <div class="profile-header">
+        <div class="profile-picture-container">
+            {% if user.profile_picture %}
+                <img class="profile-picture" src="{{ user.profile_picture.url }}" >
+            {% elif user.picture_url %}
+                <img class="profile-picture" src="{{ user.picture_url }}" >
+            {% else %}   
+                <img class="profile-picture" src="{{ request.scheme }}://{{ request.get_host }}/media/profile_pics/default-profile-picture.png">
+            {% endif %}
+        </div>
+        <h2 class="profile-name">{{ user.name }}</h2>
+        <p class="profile-reputation"><strong>Reputation:</strong> {{ user.reputation_points }}</p>
+        <p class="profile-joined"><strong>Joined:</strong> {{ user.date_joined }}</p>
+    </div>
+    <div class="profile-content">
+        <div class="profile-section">
+            <h3 class="section-title">About Me</h3>
+            <p class="profile-bio">{{ user.bio }}</p>
+        </div>
+        <div class="profile-section">
+            <h3 class="section-title">Personal Information</h3>
+            <p class="profile-country"><strong>Country:</strong> {{ user.country }}</p>
+            {% if user.display_gender %}
+                <p class="profile-gender"><strong>Gender:</strong> {{ user.gender }}</p>
+            {% endif %}
+            {% if user.display_age %}
+                <p class="profile-age"><strong>Age:</strong> {{ user.age }}</p>
+            {% endif %}
+        </div>
+    </div>    
+
+        
+    {% if request.user.is_authenticated and request.user != user %}
+    <div class="button-container">
+        <a href="{% url 'inbox' %}" class="button">Message</a>
+    </div>
+    {% endif %}
+
+{% else %}
+    <p>User not found.</p>
+{% endif %}
+</div>
+{% endblock %}
