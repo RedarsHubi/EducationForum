@@ -1,4 +1,7 @@
-/* General Styles */
+/* 
+* Styles for editing area
+* When the user clicks on the edit button (post or thread)
+*/
 body {
     font-family: 'Montserrat', sans-serif;
     background-color: #f8f8f8;
