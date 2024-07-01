@@ -1,0 +1,64 @@
+/* General Styles */
+body {
+    font-family: 'Montserrat', sans-serif;
+    background-color: #f8f8f8;
+}
+
+a {
+    color: #6c63ff;
+    text-decoration: none;
+    transition: color 0.3s;
+}
+
+a:hover {
+    color: #4c43e6;
+}
+
+/* Base styles for the textarea */
+.edit-input {
+    display: none; /* Initially hidden */
+    width: 100%; /* Full width */
+    height: 200px; /* Increased height for better user experience */
+    padding: 10px; /* Consistent padding */
+    border-radius: 5px; /* Consistent border radius */
+    border: 1px solid #e6e6e6; /* Consistent initial border */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Consistent shadow */
+    font-family: inherit; /* Inherit font family from parent */
+    font-size: 16px; /* Consistent font size */
+    line-height: 1.4; /* Consistent line height */
+    resize: vertical; /* Allow vertical resizing */
+    background-color: #fff; /* Consistent background color */
+    color: #333; /* Consistent text color */
+    transition: border-color 0.3s, box-shadow 0.3s; /* Smooth transitions */
+}
+
+/* Style the textarea when focused */
+.edit-input:focus {
+    border: 1px solid #6c63ff; /* Consistent blue border on focus */
+    outline: none; /* Remove default outline */
+    box-shadow: 0 0 5px rgba(108, 99, 255, 0.3); /* Consistent blue shadow */
+}
+
+/* Show and hide animations */
+.edit-input.show {
+    display: block; /* Show the textarea */
+    opacity: 1; /* Fully visible */
+    transition-delay: 0.4s;
+    transform: translateY(0); /* Return to original position */
+}
+
+.edit-input.hide {
+    opacity: 0; /* Fully hidden */
+    transform: translateY(-10px); /* Move upwards */
+    display: none; /* You can add display: none for when the opacity reaches 0 */
+    transition-delay: 0.4s; /* Delay the hiding transition */
+}
+
+/* Style for disabled state */
+.edit-input:disabled {
+    background-color: #f0f0f0; /* Gray background for disabled state */
+    border: 1px solid #ccc; /* Consistent border color */
+    color: #999; /* Gray text color */
+    box-shadow: none; /* No shadow when disabled */
+    cursor: not-allowed; /* Indicate not editable */
+}
