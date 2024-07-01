@@ -1,3 +1,23 @@
+/**
+ * Post Editing Logic
+ * 
+ * Features:
+ * - Edit and save posts and threads
+ * - Event delegation (event listner)
+ * - Integration with HTMX for dynamic content updates
+ * - CSRF token handling for secure POST requests
+ * - Visual feedback during save operations
+ * 
+ * Main Functions:
+ * - attachEditAndSaveEventListeners(): Sets up event listeners using event delegation
+ * - handleEditButtonClick(): Manages the UI for editing a post
+ * - handleSaveButtonClick(): Handles the saving of edited post content
+ * 
+ * Usage:
+ * The script automatically initializes when the DOM content is loaded and re-initializes
+ * after HTMX requests to ensure proper functionality with dynamically loaded content.
+ */
+
 document.addEventListener("DOMContentLoaded", function () {
     attachEditAndSaveEventListeners();
 
