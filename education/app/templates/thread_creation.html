@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% block title %}Create Thread{% endblock %}
+{% block content %}
+    <h1>Create Thread</h1>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.title.label_tag }}
+        {{ form.title }}
+        {{ form.title.errors }}
+        <br>
+        {{ form.text.label_tag }}
+        {{ form.text }}
+        {{ form.text.errors }}
+        <br>
+        <label for="id_category">Category:</label>
+        <select name="category" id="id_category">
+            {% for category in categories %}
+                <option value="{{ category.id }}">{{ category.name }}</option>
+            {% endfor %}
+        </select>
+        <br>
+        <button type="submit" class="button">Save</button>
+    </form>
+{% endblock %}

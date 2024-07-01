@@ -1,0 +1,449 @@
+
+a {
+    color: #6c63ff;
+    text-decoration: none;
+    transition: color 0.3s;
+}
+
+a:hover {
+    color: #4c43e6;
+}
+
+/* Navigation Bar */
+.navigation-bar {
+    margin-bottom: 20px;
+    color: rgb(0, 0, 0); /* Set text color to white for contrast */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 20px;
+    border-radius: 20px;
+    padding: 20px; /* Add some padding for a nicer look */
+    background: linear-gradient(to left, #473bd0, #81a2a2, #59597d, #735aca);
+    background-size: 200% 200%; /* Increase the gradient size */
+    animation: gradient-fade 10s ease infinite;
+  }
+  @keyframes gradient-fade {
+    0% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+    100% {
+      background-position: 0% 50%;
+    }
+  }
+
+.navigation-bar a {
+    color: rgb(0, 0, 0);
+    margin-right: 10px;
+    font-weight: 500;
+    transition: color 0.3s, transform 0.3s;
+    font-weight: bold;
+}
+
+.navigation-bar a:hover {
+    color: #e6e6e6;
+    transform: scale(1.1);
+}
+
+/* Thread Post Container */
+.thread-post-container {
+    background-color: #fff;
+    border-radius: 15px;
+    padding: 20px;
+    margin-bottom: 30px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: row;
+    position: relative;
+    transition: box-shadow 0.3s;
+}
+
+.thread-post-container:hover {
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+}
+
+/* User Container */
+.user-container {
+    width: 25%;
+    padding-right: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border-right: 1px solid #e6e6e6;
+    margin-right: 20px;
+}
+
+.user-container img {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.user-container p {
+    margin: 5px 0;
+    font-size: 14px;
+    color: #666;
+}
+
+/* Thread Post Content */
+.thread-post-content {
+    flex: 1;
+    padding: 10px;
+}
+
+.thread-post-content h3 {
+    color: #6c63ff;
+    margin-bottom: 10px;
+}
+
+.post-metadata p {
+    color: #999;
+    font-size: 14px;
+    margin: 5px 0;
+}
+
+.post-body {
+    margin: 20px 0;
+    line-height: 1.6;
+}
+
+.signature {
+    border-top: 1px solid #e6e6e6;
+    padding-top: 10px;
+    font-style: italic;
+    color: #666;
+}
+
+/* Voting Buttons */
+.voting {
+    margin-left: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.voting button {
+    background-color: transparent;
+    border: none;
+    color: #6c63ff;
+    font-size: 24px;
+    cursor: pointer;
+    transition: color 0.3s, transform 0.3s;
+}
+
+.voting button:hover {
+    color: #4c43e6;
+    transform: scale(1.2);
+}
+
+.vote-count {
+    font-size: 14px;
+    color: #666;
+    margin: 5px 0;
+}
+
+.upvote-count,
+.downvote-count {
+    display: inline-block;
+    margin: 0 5px;
+}
+
+/* Voted Styles */
+.voted .upvote-button {
+    color: #4c43e6;
+}
+
+.voted .downvote-button {
+    color: #4c43e6;
+}
+
+/* Actions */
+.actions {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.actions button {
+    background-color: transparent;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: background-color 0.3s, transform 0.3s;
+}
+
+.actions button:hover {
+    transform: scale(1.05);
+}
+
+
+/* Reply Form */
+#comments h4 {
+    color: #6c63ff;
+    margin-bottom: 10px;
+}
+
+#comments form {
+    background-color: #fff;
+    border-radius: 15px;
+    padding: 20px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+#comments textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #e6e6e6;
+    border-radius: 5px;
+    resize: vertical;
+    font-family: inherit;
+    font-size: 16px;
+    line-height: 1.4;
+    color: #333;
+    transition: border-color 0.3s;
+}
+
+#comments textarea:focus {
+    outline: none;
+    border-color: #6c63ff;
+    box-shadow: 0 0 5px rgba(108, 99, 255, 0.3);
+    animation: pulse 2s infinite;
+}
+
+#comments .save-btn {
+    background-color: #6c63ff;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: background-color 0.3s, transform 0.3s;
+    margin-top: 10px;
+}
+
+#comments .save-btn:hover {
+    background-color: #4c43e6;
+    transform: scale(1.05);
+    box-shadow: 0 0 10px rgba(108, 99, 255, 0.5);
+}
+
+/* Threads Page */
+.thread-container {
+    display: flex;
+    background-color: #fff;
+    border-radius: 15px;
+    padding: 20px;
+    margin-bottom: 30px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    position: relative;
+    transition: box-shadow 0.3s;
+}
+
+.thread-container:hover {
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+}
+
+.thread-section {
+    flex: 1;
+    padding-right: 20px;
+    border-right: 1px solid #e6e6e6;
+    margin-right: 20px;
+}
+
+.thread-section h3 a {
+    color: #6c63ff;
+    transition: color 0.3s;
+}
+
+.thread-section h3 a:hover {
+    color: #4c43e6;
+    text-decoration: underline;
+}
+
+.counts-section,
+.last-post-section {
+    width: 20%;
+    text-align: center;
+}
+
+.counts-section p,
+.last-post-section p {
+    margin: 5px 0;
+    color: #666;
+}
+
+.thread-post-container {
+    position: relative;
+}
+
+.delete-button-container {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+}
+
+.delete-button {
+    background-color: transparent;
+    border: none;
+    color: #ff4d4d;
+    font-size: 18px;
+    cursor: pointer;
+    transition: color 0.3s, transform 0.3s;
+}
+
+.delete-button:hover {
+    color: #cc0000;
+    transform: scale(1.2);
+}
+
+.thread-creation-container {
+    background-color: #fff;
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 30px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.thread-creation-container h2 {
+    color: #6c63ff;
+    margin-bottom: 20px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.form-group input,
+.form-group textarea,
+.form-group select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #e6e6e6;
+    border-radius: 5px;
+    font-family: inherit;
+    font-size: 16px;
+    color: #333;
+    transition: border-color 0.3s;
+}
+
+.form-group input:focus,
+.form-group textarea:focus,
+.form-group select:focus {
+    outline: none;
+    border-color: #6c63ff;
+    box-shadow: 0 0 5px rgba(108, 99, 255, 0.3);
+}
+
+.create-button {
+    background-color: #6c63ff;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: background-color 0.3s, transform 0.3s;
+}
+
+.create-button:hover {
+    background-color: #4c43e6;
+    transform: scale(1.05);
+    box-shadow: 0 0 10px rgba(108, 99, 255, 0.5);
+}
+
+/* Pulse Animation */
+@keyframes pulse {
+    0% {
+        box-shadow: 0 0 5px rgba(108, 99, 255, 0.3);
+    }
+    50% {
+        box-shadow: 0 0 20px rgba(108, 99, 255, 0.6);
+    }
+    100% {
+        box-shadow: 0 0 5px rgba(108, 99, 255, 0.3);
+    }
+}
+
+.edit-button {
+    position: absolute;
+    top: 0px;
+    right: 30px;
+    z-index: 1;
+}
+
+.report-thread-btn, .report-post-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0.5rem;
+    border-radius: 0.375rem;
+    transition: background-color 0.2s ease-in-out;
+}
+
+.report-thread-btn:hover, .report-post-btn:hover {
+    background-color: #f3f4f6;
+}
+
+.report-icon {
+    width: 1.5rem;
+    height: 1.5rem;
+    stroke: #6B7280;
+}
+.voting button.voted {
+    background-color: green;
+    color: white;
+}
+.navigation-bar {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 50px; /* Set a height for the container */
+  }
+  
+  .navigation-bar p {
+    margin: 0;
+    text-align: center;
+  }
+.thread-title {
+    text-align: center;
+    font-size: 30px;
+  font-weight: bold;
+  color: #fff;
+  text-shadow: 2px 2px 0 rgb(14, 42, 164), 4px 4px 0 #786fb0;
+  transform: translateZ(20px);
+  
+}
+.post-sum {
+    color: #000000;
+    font-size: 16px;
+    font-weight: bold;
+    padding: 12px 18px;
+    background-color: #f5f5f5;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    border-radius: 220px;
+    overflow: hidden;
+  }
+

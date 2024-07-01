@@ -1,0 +1,169 @@
+{% load static %}
+
+<div class="thread-post-container" id="post-container-{{ post.id }}">
+    <div class="user-container">
+        {% if post.user_id.profile_picture %}
+            <img src="{{ post.user_id.profile_picture.url }}" alt="Profile Picture">
+        {% endif %}
+        {% if post.user_id.picture_url %}
+            <img src="{{ post.user_id.picture_url }}" alt="Profile Picture">
+        {% endif %}
+        <p><a href="{% url 'user' %}?id={{ post.user_id.id }}">{{ post.user_id.name }}</a></p>
+        <p>{{ post.user_id.country }}</p>
+        <p>Joined on: {{ post.user_id.date_joined }}</p>
+        {% if post.user_id.display_gender %}
+            <p>Gender: {{ post.user_id.gender }}</p>
+        {% endif %}
+        {% if post.user_id.display_age %}
+            <p>Age: {{ post.user_id.age }}</p>
+        {% endif %}
+    </div>
+
+    <div class="thread-post-content">
+        <h3>Re: {{ threads.title }}</h3>
+        <div class="post-metadata">
+            <p>Created: {{ post.created_at }}</p>
+            <p>Last modification: {{ post.updated_at }}</p>
+        </div>
+        <div class="post-body">
+            <br>
+            <p id="post-text-{{ post.id }}" style="white-space: pre-wrap">{{ post.text }}</p>
+            <textarea id="edit-input-{{ post.id }}" class="edit-input" rows="5" style="display:none; ">{{ post.text }}</textarea>
+            <button id="save-button-{{ post.id }}" class="save-button" data-post-id="{{ post.id }}" style="display:none;">Save</button>
+        </div>
+
+        <hr class="signature-divider" />
+        <div class="signature">
+            <p>{{ post.user_id.signature }}</p>
+        </div>
+
+        {% if post.user_id == current_user %}
+        <div class="delete-button-container">
+            <a href="{% url 'delete_post' post.id %}" class="delete-button" data-post-id="{{ post.id }}">
+                <i class="fas fa-times-circle"></i>
+            </a>
+        </div>
+        {% endif %}
+    </div>
+
+    <div class="actions">
+        {% if post.user_id != current_user %}
+        <button class="report-button" data-post-id="{{ post.id }}">
+            <svg class="report-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M12 8V13" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M12 16H12.01" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+        </button>
+        {% endif %}
+        {% if post.user_id == current_user %}
+        <button class="edit-button" data-post-id="{{ post.id }}">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M18.9445 9.1875L14.9445 5.1875M18.9445 9.1875L13.946 14.1859C13.2873 14.8446 12.4878 15.3646 11.5699 15.5229C10.6431 15.6828 9.49294 15.736 8.94444 15.1875C8.39595 14.639 8.44915 13.4888 8.609 12.562C8.76731 11.6441 9.28735 10.8446 9.946 10.1859L14.9445 5.1875M18.9445 9.1875C18.9445 9.1875 21.9444 6.1875 19.9444 4.1875C17.9444 2.1875 14.9445 5.1875 14.9445 5.1875M20.5 12C20.5 18.5 18.5 20.5 12 20.5C5.5 20.5 3.5 18.5 3.5 12C3.5 5.5 5.5 3.5 12 3.5" stroke="#000000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+        </button>
+        {% endif %}
+    </div>
+    
+
+    <div class="voting" data-post-id="{{ post.id }}">
+        <button class="upvote">+</button>
+        <div class="vote-count">
+            <span class="upvote-count">{{ post.upvote_count }}</span>
+        </div>
+        <button class="downvote">-</button>
+    </div>
+</div>
+
+<script src="{% static 'scripts/upvote.js' %}"></script>
+<script src="{% static 'scripts/edit.js' %}"></script>
+<script>
+    // JavaScript to handle deleting the post
+    document.querySelectorAll('.delete-button').forEach(button => {
+        button.addEventListener('click', function() {
+            var postContainer = document.getElementById('post-container-{{ post.id }}');
+            postContainer.remove();
+        });
+    });
+
+    // JavaScript to handle showing and submitting the report form
+    document.querySelectorAll('.report-button').forEach(button => {
+        button.addEventListener('click', function() {
+            var modal = document.getElementById('reportModal');
+            modal.style.display = 'block';
+            modal.querySelector('form').action = '{% url "report_post" 0 %}'.replace('0', this.dataset.postId); });
+    });
+
+    // Close modal when clicking outside of it or on the close button
+    document.querySelector('.close').onclick = function() {
+        document.getElementById('reportModal').style.display = 'none';
+    }
+
+    window.onclick = function(event) {
+        var modal = document.getElementById('reportModal');
+        if (event.target == modal) {
+            modal.style.display = 'none';
+        }
+    }
+
+    // Setup edit event listeners
+    document.querySelectorAll('.edit-button').forEach(button => {
+        button.addEventListener('click', function() {
+            var postId = this.dataset.postId;
+            var postTextElement = document.getElementById(`post-text-${postId}`);
+            var editInputElement = document.getElementById(`edit-input-${postId}`);
+            var saveButton = document.getElementById(`save-button-${postId}`);
+
+            if (postTextElement.style.display === 'none') {
+                postTextElement.style.display = 'block';
+                editInputElement.style.display = 'none';
+                saveButton.style.display = 'none';
+            } else {
+                postTextElement.style.display = 'none';
+                editInputElement.style.display = 'block';
+                saveButton.style.display = 'block';
+            }
+        });
+    });
+
+    document.querySelectorAll('.save-button').forEach(button => {
+        button.addEventListener('click', function() {
+            var postId = this.dataset.postId;
+            var editInputElement = document.getElementById(`edit-input-${postId}`);
+            var postTextElement = document.getElementById(`post-text-${postId}`);
+            var newText = editInputElement.value;
+
+            // Perform AJAX request to update the post text
+            // ...
+
+            postTextElement.textContent = newText;
+            postTextElement.style.display = 'block';
+            editInputElement.style.display = 'none';
+            this.style.display = 'none';
+        });
+    });
+    document.querySelectorAll('.delete-button').forEach(button => {
+    button.addEventListener('click', function(event) {
+        event.preventDefault();
+        var postId = this.dataset.postId;
+        var postContainer = document.getElementById(`post-container-${postId}`);
+        fetch(this.href, {
+            method: 'DELETE',
+            headers: {
+                'X-CSRFToken': document.querySelector('input[name="csrfmiddlewaretoken"]').value
+            }
+        })
+        .then(response => {
+            if (response.ok) {
+                postContainer.remove();
+                console.log('Post deleted successfully.');
+            } else {
+                console.error('Failed to delete post:', response.status);
+            }
+        })
+        .catch(error => {
+            console.error('Error deleting post:', error);
+        });
+    });
+});
+</script>

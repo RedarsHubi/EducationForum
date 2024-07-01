@@ -1,0 +1,177 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Profile - {{ block.super }}{% endblock %}
+{% block content %}
+
+    {% if messages %}
+        <div class="alert alert-danger" role="alert">
+            <strong>Error:</strong> {{ messages }}
+        </div>
+    {% endif %}
+    <!-- Profile card -->
+    <div class="profile-card">
+        <div class="profile-header">
+            <div class="profile-picture-container">
+                <img class="profile-picture" id="profilePicture" src="{% if form.instance.profile_picture %}{{ form.instance.profile_picture.url }}{% elif form.instance.picture_url %}{{ form.instance.picture_url }}{% else %}{ 'media/profile_pics/default-profile-picture.png' }{% endif %}">
+            </div>
+            <h2 class="profile-name">{{ user.name }}</h2>
+            <p class="profile-email">{{ user.email }}</p>
+            <p class="profile-reputation"><strong>Reputation:</strong> {{ user.reputation_points }}</p>
+            <p class="profile-joined"><strong>Joined:</strong> {{ user.date_joined }}</p>
+        </div>
+        <div class="profile-content">
+            <div class="profile-section">
+                <h3 class="section-title">About Me</h3>
+                <p class="profile-bio">{{ form.instance.bio }}</p>
+            </div>
+            <div class="profile-section">
+                <h3 class="section-title">Personal Information</h3>
+                <p class="profile-country"><strong>Country:</strong> {{ user.country }}</p>
+                {% if user.display_gender %}
+                    <p class="profile-gender"><strong>Gender:</strong> {{ user.gender }}</p>
+                {% endif %}
+                {% if user.display_age %}
+                    <p class="profile-age"><strong>Age:</strong> {{ user.age }}</p>
+                {% endif %}
+            </div>
+        </div>
+        <div class="profile-actions">
+            <button class="button edit-profile-btn">Edit Profile</button>
+        </div>
+    </div> <!-- End of profile-card -->
+
+    <!-- Edit Profile Modal -->
+    <div class="modal" id="editProfileModal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Edit Profile</h2>
+            <form class="profile-form" method="post" action="{% url 'profile' %}" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="form-group">
+                    {{ form.bio.label_tag }}
+                    {{ form.bio }}
+                </div>
+                <div class="form-group">
+                    {{ form.signature.label_tag }}
+                    {{ form.signature }}
+                </div>
+                <div class="form-group">
+                    {{ form.gender.label_tag }}
+                    {{ form.gender }}
+                </div>
+                <div class="form-group">
+                    {{ form.age.label_tag }}
+                    {{ form.age }}
+                </div>
+                <div class="form-group">
+                    {{ form.display_gender.label_tag }}
+                    {{ form.display_gender }}
+                </div>
+                <div class="form-group">
+                    {{ form.display_age.label_tag }}
+                    {{ form.display_age }}
+                </div>
+                <div class="form-group">
+                    {{ form.country.label_tag }}
+                    {{ form.country }}
+                </div>
+                <div class="form-group">
+                    <p>Upload Profile Picture:</p>
+                    {{ form.profile_picture }}
+                    <img id="picturePreview" src="#" alt="Picture Preview" style="display: none; max-width: 200px; max-height: 200px;">
+                </div>
+                <div class="form-group">
+                    <p>Or enter a URL:</p>
+                    {{ form.picture_url }}
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="button save-profile-btn">Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const editProfileBtn = document.querySelector('.edit-profile-btn');
+    const editProfileModal = document.getElementById('editProfileModal');
+    const closeBtn = document.querySelector('.close');
+    const profilePicture = document.getElementById('profilePicture');
+    const picturePreview = document.getElementById('picturePreview');
+    const profilePictureInput = document.querySelector('input[name="profile_picture"]');
+    const pictureUrlInput = document.querySelector('input[name="picture_url"]');
+
+    editProfileBtn.addEventListener('click', () => {
+        editProfileModal.style.display = 'block';
+    });
+
+    closeBtn.addEventListener('click', () => {
+        editProfileModal.style.display = 'none';
+    });
+
+    window.addEventListener('click', (event) => {
+        if (event.target === editProfileModal) {
+            editProfileModal.style.display = 'none';
+        }
+    });
+
+    // Live preview of profile picture
+    profilePictureInput.addEventListener('change', function() {
+        const file = this.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function() {
+                picturePreview.src = reader.result;
+                picturePreview.style.display = 'block';
+            }
+            reader.readAsDataURL(file);
+        } else {
+            picturePreview.src = '#';
+            picturePreview.style.display = 'none';
+        }
+    });
+
+    // Live preview of picture URL
+    pictureUrlInput.addEventListener('input', function() {
+        const url = this.value;
+        if (url) {
+            picturePreview.src = url;
+            picturePreview.style.display = 'block';
+        } else {
+            picturePreview.src = '#';
+            picturePreview.style.display = 'none';
+        }
+    });
+
+    // Form validation
+    const form = document.querySelector('.profile-form');
+    form.addEventListener('submit', function(event) {
+        let isValid = true;
+
+        // Check if bio is empty
+        const bioInput = document.querySelector('textarea[name="bio"]');
+        if (bioInput.value.trim() === '') {
+            isValid = false;
+            bioInput.classList.add('is-invalid');
+        } else {
+            bioInput.classList.remove('is-invalid');
+        }
+
+        // Check if signature is empty
+        const signatureInput = document.querySelector('input[name="signature"]');
+        if (signatureInput.value.trim() === '') {
+            isValid = false;
+            signatureInput.classList.add('is-invalid');
+        } else {
+            signatureInput.classList.remove('is-invalid');
+        }
+
+        // Prevent form submission if any field is invalid
+        if (!isValid) {
+            event.preventDefault();
+        }
+    });
+});
+</script>
+{% endblock %}
