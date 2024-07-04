@@ -52,4 +52,6 @@ urlpatterns = [
     path('save_thread/<int:thread_id>/', views.save_thread, name='save_thread'),
     path('thread_page/<int:thread>/', views.thread_page, name='thread_page'),
     path('thread_page/<int:post_id>/', views.thread_page, name='thread_page'),
+    path('search/results/', views.search_results, name='search_results'),
+    
 ]
