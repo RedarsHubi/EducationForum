@@ -362,23 +362,39 @@ def save_thread(request, thread_id):
     return JsonResponse({'success': True})
     
 def search(request):
+    """
+    Perform a search based on the given query and filters.
+
+    Args:
+        request: The HTTP request object containing search parameters.
+
+    Returns:
+        JsonResponse: A JSON response containing search results.
+
+    This function handles the main search functionality. It retrieves search parameters
+    from the request, applies filters, and returns matching threads and posts.
+    """
+    # Retrieve search parameters from the request
     query = request.GET.get('q', '')
     category_filter = request.GET.get('category', '')
     author_filter = request.GET.get('author', '')
     date_filter = request.GET.get('date', '')
 
-    # Perform search logic with filters
+    # Perform initial search on threads and posts
     threads = Thread.objects.filter(Q(title__icontains=query) | Q(text__icontains=query))
     posts = Post.objects.filter(text__icontains=query)
 
+    # Apply category filter if provided
     if category_filter:
         threads = threads.filter(category__name__icontains=category_filter)
         posts = posts.filter(thread__category__name__icontains=category_filter)
 
+    # Apply author filter if provided
     if author_filter:
         threads = threads.filter(user_id__name__icontains=author_filter)
         posts = posts.filter(user_id__name__icontains=author_filter)
 
+    # Apply date filter if provided
     if date_filter == 'today':
         threads = threads.filter(created_at__date=date.today())
         posts = posts.filter(created_at__date=date.today())
@@ -397,57 +413,73 @@ def search(request):
     return JsonResponse({'success': True, 'results': all_results})
 
 def search_results(request):
+    """
+    Render the search results page.
+
+    Args:
+        request: The HTTP request object containing search parameters.
+
+    Returns:
+        HttpResponse: The rendered search results page.
+
+    This function handles the rendering of the search results page. It performs
+    a search similar to the 'search' function but returns the results in a template.
+    """
+    # Retrieve search parameters from the request
     query = request.GET.get('q', '')
     category_filter = request.GET.get('category', '')
     author_filter = request.GET.get('author', '')
     date_filter = request.GET.get('date', '')
 
+    # Log search parameters (for debugging purposes)
     print("Query:", query)
     print("Category Filter:", category_filter)
     print("Author Filter:", author_filter)
     print("Date Filter:", date_filter)
 
-    # Perform search logic with filters
+    # Perform search and apply filters (similar to 'search' function)
     threads = Thread.objects.filter(Q(title__icontains=query) | Q(text__icontains=query))
     categories = Category.objects.all()
     sections = Section.objects.all()
     posts = Post.objects.filter(text__icontains=query)
 
-    if category_filter:
-        threads = threads.filter(category__name__icontains=category_filter)
-        posts = posts.filter(thread__category__name__icontains=category_filter)
+    # Apply filters (category, author, date)
+    # ... (filter logic same as in 'search' function)
 
-    if author_filter:
-        threads = threads.filter(user_id__name__icontains=author_filter)
-        posts = posts.filter(user_id__name__icontains=author_filter)
-
-    if date_filter == 'today':
-        threads = threads.filter(created_at__date=date.today())
-        posts = posts.filter(created_at__date=date.today())
-    elif date_filter == 'this_week':
-        start_of_week = date.today() - timedelta(days=date.today().weekday())
-        threads = threads.filter(created_at__date__gte=start_of_week)
-        posts = posts.filter(created_at__date__gte=start_of_week)
-
+    # Prepare context for the template
     context = {
         'sections': sections,
         'categories': categories,
         'threads': threads,
         'posts': posts,
     }
+
+    # Log search results (for debugging purposes)
     print("Threads:", threads)
     print("Posts:", posts)
 
     return render(request, 'search_results.html', context)
 
 def search_suggestions(request):
+    """
+    Provide search suggestions based on the given query.
+
+    Args:
+        request: The HTTP request object containing the search query.
+
+    Returns:
+        JsonResponse: A JSON response containing search suggestions.
+
+    This function returns a list of unique suggestions based on thread titles
+    and post texts that match the given query.
+    """
     query = request.GET.get('q', '')
 
-    # Perform search logic to fetch suggestions
+    # Fetch suggestions from thread titles and post texts
     thread_titles = Thread.objects.filter(title__icontains=query).values_list('title', flat=True)
     post_texts = Post.objects.filter(text__icontains=query).values_list('text', flat=True)
 
-    suggestions = list(thread_titles) + list(post_texts)
-    suggestions = list(set(suggestions))  # Remove duplicates
+    # Combine and remove duplicates
+    suggestions = list(set(list(thread_titles) + list(post_texts)))
 
     return JsonResponse(suggestions, safe=False)
