@@ -361,3 +361,37 @@ def save_thread(request, thread_id):
 
     return JsonResponse({'success': True})
     
+def search(request):
+    query = request.GET.get('q', '')
+    category_filter = request.GET.get('category', '')
+    author_filter = request.GET.get('author', '')
+    date_filter = request.GET.get('date', '')
+
+    # Perform search logic with filters
+    threads = Thread.objects.filter(Q(title__icontains=query) | Q(text__icontains=query))
+    posts = Post.objects.filter(text__icontains=query)
+
+    if category_filter:
+        threads = threads.filter(category__name__icontains=category_filter)
+        posts = posts.filter(thread__category__name__icontains=category_filter)
+
+    if author_filter:
+        threads = threads.filter(user_id__name__icontains=author_filter)
+        posts = posts.filter(user_id__name__icontains=author_filter)
+
+    if date_filter == 'today':
+        threads = threads.filter(created_at__date=date.today())
+        posts = posts.filter(created_at__date=date.today())
+    elif date_filter == 'this_week':
+        start_of_week = date.today() - timedelta(days=date.today().weekday())
+        threads = threads.filter(created_at__date__gte=start_of_week)
+        posts = posts.filter(created_at__date__gte=start_of_week)
+
+    # Serialize the results
+    thread_results = [{'text': thread.text, 'url': f'/thread/{thread.id}/', 'category': thread.category.name, 'author': thread.user_id.name} for thread in threads]
+    post_results = [{'text': post.text, 'url': f'/thread/{post.thread.id}/#post-{post.id}', 'category': post.thread.category.name, 'author': post.user_id.name} for post in posts]
+
+    # Combine thread and post results
+    all_results = thread_results + post_results
+
+    return JsonResponse({'success': True, 'results': all_results})
