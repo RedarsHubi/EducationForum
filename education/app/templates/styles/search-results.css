@@ -1,0 +1,117 @@
+/* Global Styles */
+  
+  /* Search Results Container Styles */
+  .search-results-container {
+    max-width: 1200px;
+    margin: 40px auto;
+    padding: 40px;
+    background-color: #569bfc5a;
+    border-radius: 20px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .search-header {
+    text-align: center;
+    font-size: 36px;
+    color: #000d6f;
+    margin-bottom: 40px;
+    position: relative;
+    z-index: 1;
+  }
+  
+  .results-container {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    position: relative;
+    z-index: 1;
+  }
+  
+  .results-column {
+    flex: 0 0 48%;
+    margin-bottom: 40px;
+  }
+  
+  .results-title {
+    font-size: 28px;
+    color: #000d6f;
+    margin-bottom: 20px;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    animation: glowingText 10s ease infinite;
+  }
+  
+  .results-list {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .result-item {
+    padding: 20px;
+    border-radius: 15px;
+    background-color: #fff;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+    animation: scaleIn 0.5s ease;
+  }
+  
+  @keyframes scaleIn {
+    0% {
+      transform: scale(0.8);
+      opacity: 0;
+    }
+    100% {
+      transform: scale(1);
+      opacity: 1;
+    }
+  }
+  
+  .result-item::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(45deg, #fee826d8, #f7a93bd8);
+    z-index: -1;
+    opacity: 0;
+    transition: all 0.3s ease;
+  }
+  
+  .result-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+  }
+  
+  .result-item:hover::before {
+    opacity: 1;
+  }
+  
+  .result-link {
+    color: #000000;
+    text-decoration: none;
+    transition: color 0.3s ease;
+    position: relative;
+    z-index: 1;
+  }
+  
+  .result-link:hover {
+    color: #fff;
+  }
+  
+  .no-results {
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 15px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+    text-align: center;
+    position: relative;
+    z-index: 1;
+    animation: scaleIn 0.5s ease;
+  }
