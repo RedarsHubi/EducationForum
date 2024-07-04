@@ -439,3 +439,15 @@ def search_results(request):
     print("Posts:", posts)
 
     return render(request, 'search_results.html', context)
+
+def search_suggestions(request):
+    query = request.GET.get('q', '')
+
+    # Perform search logic to fetch suggestions
+    thread_titles = Thread.objects.filter(title__icontains=query).values_list('title', flat=True)
+    post_texts = Post.objects.filter(text__icontains=query).values_list('text', flat=True)
+
+    suggestions = list(thread_titles) + list(post_texts)
+    suggestions = list(set(suggestions))  # Remove duplicates
+
+    return JsonResponse(suggestions, safe=False)
