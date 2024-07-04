@@ -395,3 +395,47 @@ def search(request):
     all_results = thread_results + post_results
 
     return JsonResponse({'success': True, 'results': all_results})
+
+def search_results(request):
+    query = request.GET.get('q', '')
+    category_filter = request.GET.get('category', '')
+    author_filter = request.GET.get('author', '')
+    date_filter = request.GET.get('date', '')
+
+    print("Query:", query)
+    print("Category Filter:", category_filter)
+    print("Author Filter:", author_filter)
+    print("Date Filter:", date_filter)
+
+    # Perform search logic with filters
+    threads = Thread.objects.filter(Q(title__icontains=query) | Q(text__icontains=query))
+    categories = Category.objects.all()
+    sections = Section.objects.all()
+    posts = Post.objects.filter(text__icontains=query)
+
+    if category_filter:
+        threads = threads.filter(category__name__icontains=category_filter)
+        posts = posts.filter(thread__category__name__icontains=category_filter)
+
+    if author_filter:
+        threads = threads.filter(user_id__name__icontains=author_filter)
+        posts = posts.filter(user_id__name__icontains=author_filter)
+
+    if date_filter == 'today':
+        threads = threads.filter(created_at__date=date.today())
+        posts = posts.filter(created_at__date=date.today())
+    elif date_filter == 'this_week':
+        start_of_week = date.today() - timedelta(days=date.today().weekday())
+        threads = threads.filter(created_at__date__gte=start_of_week)
+        posts = posts.filter(created_at__date__gte=start_of_week)
+
+    context = {
+        'sections': sections,
+        'categories': categories,
+        'threads': threads,
+        'posts': posts,
+    }
+    print("Threads:", threads)
+    print("Posts:", posts)
+
+    return render(request, 'search_results.html', context)
