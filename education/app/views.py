@@ -483,3 +483,35 @@ def search_suggestions(request):
     suggestions = list(set(list(thread_titles) + list(post_texts)))
 
     return JsonResponse(suggestions, safe=False)
+
+def get_categories(request):
+    """
+    Retrieve categories based on the provided section name.
+
+    This function handles GET requests to fetch categories associated with a specific section.
+    It expects a 'section' parameter in the query string.
+
+    Parameters:
+    request (HttpRequest): The HTTP request object.
+
+    Returns:
+    JsonResponse: A JSON response containing an array of category names.
+
+    The function behaves as follows:
+    1. If a 'section' parameter is provided in the query string:
+       - It attempts to fetch categories filtered by the given section name.
+       - If categories are found, it returns a JSON array of category names.
+       - If no categories are found, it returns an empty JSON array.
+    2. If no 'section' parameter is provided, it returns an empty JSON array.
+    """
+    
+    section_name = request.GET.get('section', None)
+    if section_name:
+        try:
+            categories = Category.objects.filter(section__name=section_name)
+            categories_data = [{'name': category.name} for category in categories]
+            return JsonResponse(categories_data, safe=False)
+        except Category.DoesNotExist:
+            return JsonResponse([], safe=False)
+    else:
+        return JsonResponse([], safe=False)
