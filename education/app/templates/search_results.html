@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Search Results{% endblock %}
+{% block content %}
+<link rel="stylesheet" href="{% static 'styles/search_results.css' %}">
+<div class="search-results-container" id="search-results">
+    <h1 class="search-header">Search Results</h1>
+
+    <div class="results-container">
+        <div class="results-column">
+            <h2 class="results-title">Threads</h2>
+            <ul class="results-list" id="threads-list">
+                {% for thread in threads %}
+                    <li class="result-item">
+                        <a class="result-link thread-link" href="{% url 'thread_page' %}?thread={{ thread.id }}" data-url="{% url 'thread_page' %}?thread={{ thread.id }}">{{ thread.title }}</a>
+                    </li>
+                {% empty %}
+                    <li class="no-results">No threads found.</li>
+                {% endfor %}
+            </ul>
+        </div>
+        
+        <div class="results-column">
+            <h2 class="results-title">Posts</h2>
+            <ul class="results-list" id="posts-list">
+                {% for post in posts %}
+                    <li class="result-item">
+                        <a class="result-link post-link" href="{% url 'thread_page' %}?thread={{ post.thread.id }}#post-container-{{ post.id }}" data-url="{% url 'thread_page' %}?thread={{ post.thread.id }}">{{ post.thread.title }}</a>: {{ post.text }}
+                    </li>
+                {% empty %}
+                    <li class="no-results">No posts found.</li>
+                {% endfor %}
+            </ul>
+        </div>        
+    </div>
+</div>
+{% endblock %}
