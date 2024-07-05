@@ -1,0 +1,201 @@
+.container {
+ display: flex;
+ flex-direction: row;
+ justify-content: center;
+ align-items: flex-start;
+ max-width: 1200px;
+ margin: 40px auto;
+ padding: 40px;
+ background: linear-gradient(135deg, #2d2b66, #1e90ff, #2d2b66);
+ border-radius: 20px;
+ box-shadow: 0 8px 16px rgba(0, 0, 0, 0.5);
+}
+
+.inbox-container h1 {
+  font-size: 32px;
+  margin-bottom: 20px;
+  background: linear-gradient(180deg, #ffffff, #ff913e);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  color: transparent;
+}
+
+/* Inbox Styles */
+.inbox {
+ flex-grow: 1;
+ display: flex;
+ flex-direction: column;
+ overflow-y: auto;
+ animation: fadeInUp 0.5s ease;
+}
+
+.conversation-list {
+ list-style: none;
+ padding: 0;
+ display: flex;
+ flex-direction: column;
+ flex-grow: 1;
+ max-height: 500px; /* Set your preferred maximum height */
+ overflow-y: auto;
+}
+
+.conversation-card {
+ background: linear-gradient(226deg, #025d70, #000000e3, #2821f0, #07e7213d, #ffdb0394, #81808d);
+ border-radius: 20px;
+ box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+ padding: 20px;
+ margin-bottom: 20px;
+ transition: all 0.3s ease-in-out;
+ cursor: pointer;
+ display: flex;
+ flex-direction: column;
+ justify-content: space-between;
+ width: 800px;
+ max-width: 100%;
+ animation: slideInLeft 0.3s ease;
+ position: relative; /* Add position relative */
+}
+
+.conversation-card:hover {
+ transform: translateY(-10px);
+ box-shadow: 0 8px 16px rgba(0, 0, 0, 0.5);
+}
+
+.conversation-card h3 {
+  color: white;
+}
+
+.message-list {
+ max-height: 0;
+ overflow: hidden;
+ transition: max-height 0.3s ease-out;
+ flex-grow: 1;
+ display: flex;
+ flex-direction: column;
+ justify-content: flex-end;
+ overflow-y: auto;
+}
+
+.message-list.show {
+ max-height: 2000px;
+ transition: max-height 0.5s ease-in;
+}
+
+/* New Messages Container */
+.new-messages-container {
+ position: absolute; /* Add position absolute */
+ top: 0;
+ left: 0;
+ right: 0;
+ background: radial-gradient(circle at center, #0e1013, #615e5e);
+ border-radius: 20px;
+ box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+ padding: 20px;
+ z-index: 1; /* Add a higher z-index */
+ max-height: 300px; /* Set a maximum height */
+ overflow-y: auto;
+ animation: slideInDown 0.5s ease;
+}
+
+/* Message Styles */
+.message {
+ border-radius: 15px;
+ padding: 15px;
+ margin-bottom: 15px;
+ transition: all 0.3s ease-in-out;
+ cursor: pointer;
+ align-self: flex-start;
+ box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+ animation: slideInLeft 0.3s ease;
+}
+
+.message:hover {
+ transform: translateY(-2px);
+ box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+}
+
+.message.sender {
+  background: radial-gradient(circle at center, #ffcd17, #dabd2d);
+  color: #0b0b01;
+  align-self: flex-end;
+}
+
+.message.receiver {
+  background: #26009c;
+  color: #ffffff;
+
+}
+
+.message.unread {
+ font-weight: bold;
+}
+
+.compose-container {
+  margin-top: 20px;
+  border-radius: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  background: linear-gradient(39deg, #025d70, #000000e3, #2821f0, #07e7213d, #ffdb0394, #81808d);
+  transition: background 0.5s ease-in-out;
+  animation: fadeInUp 0.5s ease;
+}
+
+.compose-form {
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+#id_receiver {
+  font-family: Arial, sans-serif; /* Specify font family */
+  font-size: 14px; /* Specify font size */
+  color: #333; /* Specify font color */
+  padding: 8px; /* Add padding */
+  border: 1px solid #ccc; /* Add border */
+  background-color: #fff; /* Specify background color */
+  width: 200px; /* Specify width */
+}
+
+/* Style the dropdown menu options */
+#id_receiver option {
+  font-family: Arial, sans-serif; /* Specify font family */
+  font-size: 14px; /* Specify font size */
+  color: #333; /* Specify font color */
+  background-color: #fff; /* Specify background color */
+}
+
+.send-btn {
+  display: block;
+  background-color: #fbf12f;
+  color: black;
+  transition: background-color 0.3s, border-color 0.3s;
+  padding: 12px 20px;
+  font-size: 16px;
+  border-radius: 10px;
+}
+
+.send-btn:hover {
+  background-color: #fce576;
+}
+
+.compose-form label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+  color: white;
+}
+
+.compose-form select,
+.compose-form textarea {
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+  font-size: 14px;
+  resize: vertical;
+}
