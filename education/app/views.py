@@ -515,3 +515,170 @@ def get_categories(request):
             return JsonResponse([], safe=False)
     else:
         return JsonResponse([], safe=False)
+
+
+@login_required
+def inbox(request, message_id=None):
+    # Fetch unread message count
+    if request.user.is_authenticated:
+        unread_counts = Message.objects.filter(receiver=request.user, is_read=False).count()
+    else:
+        unread_counts = 0
+
+    # Fetch received and sent messages with pagination
+    received_messages = Message.objects.filter(receiver=request.user).order_by('-timestamp')
+    sent_messages = Message.objects.filter(sender=request.user).order_by('-timestamp')
+
+    # Mark messages as read when they are viewed
+    if message_id:
+        message = get_object_or_404(Message, id=message_id, receiver=request.user)
+        if not message.is_read:
+            message.is_read = True
+            message.save()
+            unread_counts = Message.objects.filter(receiver=request.user, is_read=False).count()
+
+    # Fetch received and sent messages
+    received_messages = Message.objects.filter(receiver=request.user).order_by('-timestamp')
+    sent_messages = Message.objects.filter(sender=request.user).order_by('-timestamp')
+    
+    # Organize messages by sender/receiver for display
+    messages = {}
+    for message in received_messages:
+        sender_name = message.sender.name
+        if sender_name not in messages:
+            messages[sender_name] = []
+        messages[sender_name].append(message)
+    
+    for message in sent_messages:
+        receiver_name = message.receiver.name
+        if receiver_name not in messages:
+            messages[receiver_name] = []
+        messages[receiver_name].append(message)
+    
+    # Sort conversations by the most recent message
+    sorted_messages = sorted(messages.items(), key=lambda x: max(x[1], key=lambda y: y.timestamp).timestamp, reverse=True)
+    sorted_messages = OrderedDict(sorted_messages)
+    # Prepare form for sending messages
+    original_message = None
+    form = MessageForm()
+
+    if message_id:
+        original_message = get_object_or_404(Message, id=message_id, receiver=request.user)
+        if not original_message.is_read:
+            original_message.is_read = True
+            original_message.save()
+            # Recalculate unread counts after marking a message as read
+            unread_counts = Message.objects.filter(receiver=request.user, is_read=False).count()
+        form = MessageForm(initial={'receiver': original_message.sender})
+
+    if request.method == 'POST':
+        form = MessageForm(request.POST)
+        if form.is_valid():
+            receiver_id = request.POST.get('receiver')
+            receiver = get_object_or_404(CustomUser, id=receiver_id)
+            message = form.save(commit=False)
+            message.sender = request.user
+            message.receiver = receiver
+            message.save()
+
+            # Update conversation thread in messages dictionary
+            receiver_name = receiver.name
+            if receiver_name not in messages:
+                messages[receiver_name] = []
+            messages[receiver_name].append(message)
+
+            django_messages.success(request, 'Message sent successfully.')
+            return redirect('inbox')
+
+    # Exclude the logged-in user from the list of users to send messages to
+    users = CustomUser.objects.exclude(id=request.user.id)
+    
+    return render(request, 'inbox.html', {
+        'form': form,
+        'users': users,
+        'original_message': original_message,
+        'messages': sorted_messages,
+        'unread_counts': unread_counts,
+        'user': request.user,
+    })
+
+def unread_count_api(request):
+    if request.user.is_authenticated:
+        unread_count = Message.objects.filter(receiver=request.user, is_read=False).count()
+        return JsonResponse({'unread_count': unread_count})
+    else:
+        return JsonResponse({'unread_count': 0})
+
+@login_required
+def update_unread_count(request):
+    if request.method == 'GET':
+        if request.user.is_authenticated:
+            unread_count = Message.objects.filter(receiver=request.user, is_read=False).count()
+        else:
+            unread_count = 0
+        return JsonResponse({'unread_count': unread_count})
+    return JsonResponse({'error': 'Invalid request method'}, status=400)
+
+def mark_as_read(request, message_id):
+    print("mark_as_read view called")
+    if request.method == 'POST':
+        print(f"Marking message {message_id} as read")
+        message = get_object_or_404(Message, id=message_id, receiver=request.user)
+        if not message.is_read:
+            message.is_read = True
+            message.save()
+            print(f"Message {message_id} marked as read")
+
+            # Send a WebSocket message to update the unread count
+            channel_layer = get_channel_layer()
+            async_to_sync(channel_layer.group_send)(
+                f'inbox_{request.user.id}',
+                {
+                    'type': 'unread_count_update',
+                    'unread_count': Message.objects.filter(receiver=request.user, is_read=False).count()
+                }
+            )
+
+            return JsonResponse({'success': True})
+    return JsonResponse({'success': False})
+
+@login_required
+def message_view(request, user_id):
+    sender = request.user
+    receiver = get_object_or_404(CustomUser, id=user_id)
+
+    if request.method == 'POST':
+        form = MessageForm(request.POST)
+        if form.is_valid():
+            message = form.save(commit=False)
+            message.sender = sender
+            message.receiver = receiver
+            message.save()
+            messages.success(request, 'Message sent successfully.')
+            return redirect('inbox')
+    else:
+        form = MessageForm(initial={'receiver': receiver.id})
+
+    return render(request, 'message.html', {
+        'form': form,
+        'receiver': receiver,
+    })
+
+def inbox_messages(request):
+    page = int(request.GET.get('page', 1))
+    messages = Message.objects.filter(receiver=request.user).order_by('-timestamp')
+    paginator = Paginator(messages, 20)
+    page_obj = paginator.get_page(page)
+
+    return JsonResponse({
+        'messages': [
+            {
+                'id': message.id,
+                'sender': message.sender.name,
+                'is_read': message.is_read,
+                'content': message.content
+            } for message in page_obj
+        ]
+    })
+
+
