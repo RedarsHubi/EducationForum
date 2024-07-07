@@ -66,9 +66,11 @@ This forum is designed to facilitate academic discussions and collaborative lear
   cd [project_directory]
 
 2. Create and activate a virtual environment:
-
+In Unix systems:
   python -m venv venv
   source venv/bin/activate
+In PowerShell:
+  ./.venv/Scripts/Activate.ps1
 
 3. Install dependencies:
   

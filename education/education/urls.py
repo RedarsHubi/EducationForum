@@ -16,11 +16,12 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from forum.models import CustomUser
-from forum import views
+from app.models import CustomUser
+from app import views
 from django.conf import settings
 from django.conf.urls.static import static
 from channels.routing import ProtocolTypeRouter, URLRouter
+from .consumers import InboxConsumer, ChatConsumer
 
 
 websocket_urlpatterns = [
