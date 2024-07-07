@@ -1,0 +1,101 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}
+    {% if message %}
+        {% if original_message %}
+            Message
+        {% else %}
+            Compose
+        {% endif %}
+    {% else %}
+        Inbox
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="inbox-container">
+        <div class="inbox">
+            <h1>Inbox</h1>
+            <div class="conversation-list">
+                {% for sender, messages in messages.items %}
+                <div class="conversation-card" onclick="markConversationAsRead('{{ messages.0.sender.id  }}')">
+                        <h3>{{ sender }}</h3>
+                        <div class="message-list">
+                            {% for message in messages|dictsort:"timestamp" %}
+                            <div
+                                class="message {% if message.sender == request.user %}sender{% else %}receiver{% endif %} {% if not message.is_read %}unread{% endif %}"
+                                data-message-id="{{ message.id }}"
+                            >
+                                <div class="message-content">
+                                    <p>{{ message.content }}</p>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+            <div class="compose-container">
+                <h1>{% if original_message %}Message{% else %}Compose{% endif %}</h1>
+                {% if original_message %}
+                    <div class="message-detail">
+                        <div class="message-info">
+                            <p><strong>From:</strong> {{ original_message.sender }}</p>
+                            <p><strong>Timestamp:</strong> {{ original_message.timestamp }}</p>
+                        </div>
+                        <p>{{ original_message.content }}</p>
+                        <h2>Respond</h2>
+                        <form method="post" action="{% url 'inbox' original_message.id %}" class="response-form">
+                            {% csrf_token %}
+                            <textarea name="content" rows="4"></textarea>
+                            <button type="submit" class="send-btn">Send</button>
+                        </form>
+                    </div>
+                {% else %}
+                    <form method="post" class="compose-form">
+                        {% csrf_token %}
+                        <label for="id_receiver">To:</label>
+                        <select name="receiver" id="id_receiver">
+                            {% for user in users %}
+                                <option value="{{ user.id }}">{{ user.name }}</option>
+                            {% endfor %}
+                        </select>
+                        <label for="id_content">Message:</label>
+                        <textarea id="id_content" name="content" rows="4"></textarea>
+                        <button type="button" id="emoji-btn" style="max-width: 20px;" class="btn btn-outline-primary">😀</button>
+                <div id="emoji-picker-container">
+                    <emoji-picker id="emoji-picker"></emoji-picker>
+                </div>
+                        <button type="submit" class="send-btn">Send</button>
+                    </form>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    <script src="{% static 'scripts/fix.js' %}"></script>
+    <script>document.addEventListener('DOMContentLoaded', () => {
+        const emojiBtn = document.getElementById('emoji-btn');
+        const emojiPickerContainer = document.getElementById('emoji-picker-container');
+        const emojiPicker = document.getElementById('emoji-picker');
+        const textArea = document.getElementById('text');
+
+        // Ensure the emoji picker container is hidden initially
+        emojiPickerContainer.style.display = 'none';
+
+        emojiBtn.addEventListener('click', () => {
+            if (emojiPickerContainer.style.display === 'none' || emojiPickerContainer.style.display === '') {
+                emojiPickerContainer.style.display = 'block';
+            } else {
+                emojiPickerContainer.style.display = 'none';
+            }
+        });
+
+        emojiPicker.addEventListener('emoji-click', (event) => {
+            textArea.value += event.detail.unicode;
+            emojiPickerContainer.style.display = 'none';
+        });
+    });
+    </script>
+{% endblock %}
