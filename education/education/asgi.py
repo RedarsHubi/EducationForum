@@ -19,17 +19,18 @@ django.setup()
 from django.core.asgi import get_asgi_application
 from channels.routing import ProtocolTypeRouter, URLRouter
 from channels.auth import AuthMiddlewareStack
-from myproject.routing import websocket_urlpatterns
+from education.routing import websocket_urlpatterns
 
 """
 ProtocolTypeRouter: Routes incoming requests based on their protocol type (HTTP or WebSocket).
-""""
+"""
 application = ProtocolTypeRouter({
     "http": get_asgi_application(),
     "websocket": AuthMiddlewareStack(
         URLRouter(
             websocket_urlpatterns
-          """ Note: Make sure to define websocket_urlpatterns in education/routing.py to specify WebSocket URL patterns."""
         )
     ),
 })
+
+# Note: Make sure to define websocket_urlpatterns in education/routing.py to specify WebSocket URL patterns.
