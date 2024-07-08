@@ -77,28 +77,30 @@ def register(request):
         form = RegisterForm()
     return render(request, 'register.html', {'form': form})
 
+from django.contrib import messages
+
 @login_required
 def profile(request):
     user = request.user
-    error_msg = None
-    print("User in profile view:", user)
     if request.method == 'POST':
         form = CustomUserForm(request.POST, request.FILES, instance=user)
         if form.is_valid():
             profile_picture = form.cleaned_data.get('profile_picture')
             picture_url = form.cleaned_data.get('picture_url')
             if profile_picture and picture_url:
-                error_msg = "You can only provide either a profile picture or a picture URL, not both."
+                messages.error(request, "You can only provide either a profile picture or a picture URL, not both.")
             else:
                 form.save()
-                return redirect('profile')  # Redirect to the profile page after successful update
+                messages.success(request, "Profile updated successfully.")
+                return redirect('profile')
         else:
-            error_msg = "There was an error. Please correct the form."
-            # Add error message to display in the template
-            messages.error(request, error_msg) # Redirect to the profile page after successful update
+            for field, errors in form.errors.items():
+                for error in errors:
+                    messages.error(request, f"{field}: {error}")
     else:
         form = CustomUserForm(instance=user)
-    return render(request, 'profile.html', {'form': form, 'user': user, 'messages': error_msg })
+    
+    return render(request, 'profile.html', {'form': form, 'user': user})
 
 
 def logout_view(request):

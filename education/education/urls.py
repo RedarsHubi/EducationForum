@@ -61,3 +61,5 @@ urlpatterns = [
     path('thread_page/<int:post_id>/', views.thread_page, name='thread_page'),
     path('report_thread/<int:thread_id>/', views.report_thread, name='report_thread'),
 ]
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

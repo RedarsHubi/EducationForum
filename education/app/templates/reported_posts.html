@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="page-container">
+  <div class="reports-container">
+    <h1 class="reports-title">Reported Threads</h1>
+    {% if reported_threads %}
+    <div class="reports-list">
+      {% for thread in reported_threads %}
+      <div class="report-item">
+        <div class="report-header">
+          <h3 class="report-title">{{ thread.title }}</h3>
+        </div>
+        <p class="report-content">{{ thread.text }}</p>
+        {% for report in thread.reports.all %}
+        <div class="report-details">
+          <p class="report-detail"><strong>Reported by:</strong> {{ report.reported_by }}</p>
+          <p class="report-detail"><strong>Reason:</strong> {{ report.get_reason_display }}</p>
+          <p class="report-detail"><strong>Details:</strong> {{ report.details }}</p>
+          <p class="report-detail"><strong>Reported on:</strong> {{ report.created_at|date:"F j, Y, g:i a" }}</p>
+          <a href="{% url 'handle_report' report.id %}" class="btn btn-primary">Handle Report</a>  
+        </div>
+        {% endfor %}
+      </div>
+      {% endfor %}
+    </div>
+    {% else %}
+    <p class="no-reports">No reported threads found.</p>
+    {% endif %}
+    <h1 class="reports-title-post">Reported Posts</h1>
+    {% if reported_posts %}
+    <div class="reports-list">
+      {% for post in reported_posts %}
+      <div class="report-item">
+        <div class="report-header">
+          <h3 class="report-title">{{ post.title }}</h3>
+        </div>
+        <p class="report-content">{{ post.text }}</p>
+        {% for report in post.reports.all %}
+        <div class="report-details">
+          <p class="report-detail"><strong>Reported by:</strong> {{ report.reported_by }}</p>
+          <p class="report-detail"><strong>Reason:</strong> {{ report.get_reason_display }}</p>
+          <p class="report-detail"><strong>Details:</strong> {{ report.details }}</p>
+          <p class="report-detail"><strong>Reported on:</strong> {{ report.created_at|date:"F j, Y, g:i a" }}</p>
+          <a href="{% url 'handle_report' report.id %}" class="btn btn-primary">Handle Report</a>  
+        </div>
+        {% endfor %}
+      </div>
+      {% endfor %}
+    </div>
+    {% else %}
+    <p class="no-reports">No reported posts found.</p>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

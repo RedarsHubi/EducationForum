@@ -4,15 +4,17 @@
 {% block content %}
 
     {% if messages %}
-        <div class="alert alert-danger" role="alert">
-            <strong>Error:</strong> {{ messages }}
-        </div>
+        {% for message in messages %}
+            <div class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %}" role="alert">
+                {{ message }}
+            </div>
+        {% endfor %}
     {% endif %}
     <!-- Profile card -->
     <div class="profile-card">
         <div class="profile-header">
             <div class="profile-picture-container">
-                <img class="profile-picture" id="profilePicture" src="{% if form.instance.profile_picture %}{{ form.instance.profile_picture.url }}{% elif form.instance.picture_url %}{{ form.instance.picture_url }}{% else %}{ 'media/profile_pics/default-profile-picture.png' }{% endif %}">
+                <img class="profile-picture" id="profilePicture" src="{% if form.instance.profile_picture %}{{ form.instance.profile_picture.url }}{% elif form.instance.picture_url %}{{ form.instance.picture_url }}{% endif %}">
             </div>
             <h2 class="profile-name">{{ user.name }}</h2>
             <p class="profile-email">{{ user.email }}</p>
