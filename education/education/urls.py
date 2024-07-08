@@ -55,4 +55,5 @@ urlpatterns = [
     path('thread_page/<int:post_id>/', views.thread_page, name='thread_page'),
     path('search/results/', views.search_results, name='search_results'),
     path('search/suggestions/', views.search_suggestions, name='search_suggestions'),
+    path('inbox/', views.inbox, name='inbox'),
 ]
