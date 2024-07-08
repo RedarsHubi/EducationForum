@@ -79,28 +79,42 @@ def register(request):
 
 from django.contrib import messages
 
+import os
+from django.conf import settings
+
 @login_required
 def profile(request):
-    user = request.user
     if request.method == 'POST':
-        form = CustomUserForm(request.POST, request.FILES, instance=user)
+        form = CustomUserForm(request.POST, request.FILES, instance=request.user)
         if form.is_valid():
-            profile_picture = form.cleaned_data.get('profile_picture')
-            picture_url = form.cleaned_data.get('picture_url')
-            if profile_picture and picture_url:
-                messages.error(request, "You can only provide either a profile picture or a picture URL, not both.")
-            else:
-                form.save()
-                messages.success(request, "Profile updated successfully.")
-                return redirect('profile')
+            user = form.save(commit=False)
+            if 'profile_picture' in request.FILES:
+                file = request.FILES['profile_picture']
+                filename = file.name
+                filepath = os.path.join(settings.MEDIA_ROOT, 'profile_pics', filename)
+                
+                print(f"Attempting to save file: {filepath}")
+                
+                with open(filepath, 'wb+') as destination:
+                    for chunk in file.chunks():
+                        destination.write(chunk)
+                
+                print(f"File saved successfully: {os.path.exists(filepath)}")
+                
+                user.profile_picture = f'profile_pics/{filename}'
+            
+            user.save()
+            print(f"User saved. Profile picture path: {user.profile_picture.path if user.profile_picture else 'No picture'}")
+            
+            messages.success(request, "Profile updated successfully.")
+            return redirect('profile')
         else:
-            for field, errors in form.errors.items():
-                for error in errors:
-                    messages.error(request, f"{field}: {error}")
+            print(f"Form errors: {form.errors}")
+            messages.error(request, "Error updating profile. Please check the form.")
     else:
-        form = CustomUserForm(instance=user)
+        form = CustomUserForm(instance=request.user)
     
-    return render(request, 'profile.html', {'form': form, 'user': user})
+    return render(request, 'profile.html', {'form': form, 'user': request.user})
 
 
 def logout_view(request):
