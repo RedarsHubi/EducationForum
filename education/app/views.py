@@ -681,6 +681,9 @@ def inbox_messages(request):
         ]
     })
 
+def is_moderator(user):
+    return user.is_staff
+
 @user_passes_test(is_moderator)
 def reported_posts(request):
     """

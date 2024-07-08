@@ -76,6 +76,14 @@ In PowerShell:
   
   pip install -r requirements.txt
 
+  (Loading  Data)
+
+  python manage.py loaddata initial_data.json
+
+  (Dumping  Data)
+
+  python manage.py dumpdata > initial_data.json
+
 4. Set up the PostgreSQL database:
 - Create a new database
 - Update the database configuration in `settings.py`
