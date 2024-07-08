@@ -55,5 +55,9 @@ urlpatterns = [
     path('thread_page/<int:post_id>/', views.thread_page, name='thread_page'),
     path('search/results/', views.search_results, name='search_results'),
     path('search/suggestions/', views.search_suggestions, name='search_suggestions'),
-    path('inbox/', views.inbox, name='inbox'),
+    path('inbox/', views.inbox, name='inbox'),path('report_post/<int:post_id>/', views.report_post, name='report_post'),
+    path('reported_posts/', views.reported_posts, name='reported_posts'),
+    path('handle_report/<int:report_id>/', views.handle_report, name='handle_report'),
+    path('thread_page/<int:post_id>/', views.thread_page, name='thread_page'),
+    path('report_thread/<int:thread_id>/', views.report_thread, name='report_thread'),
 ]
