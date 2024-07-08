@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="reports-container">
+        <div class="row">
+            <div class="col-md-8 offset-md-2">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="d-flex justify-content-between align-items-center">
+                            {% if report.post.id == 1 %}
+                                <h4 class="card-title">{{ report.thread.title }}</h4>
+                            {% else %}
+                                <h4 class="card-title">{{ report.post.title }}</h4>
+                            {% endif %}
+                            <span class="badge badge-primary">{{ report.get_reason_display }}</span>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-subtitle mb-3">Content</h5>
+                        {% if report.post.id == 1 %}
+                            <p class="card-text">{{ report.thread.text }}</p>
+                        {% else %}
+                            <p class="card-text">{{ report.post.text }}</p>
+                        {% endif %}
+                        <hr>
+                        <h5 class="card-subtitle mb-3">Reported by</h5>
+                        <p class="card-text">{{ report.reported_by }}</p>
+                        <hr>
+                        <h5 class="card-subtitle mb-3">Details</h5>
+                        <p class="card-text">{{ report.details }}</p>
+                        <hr>
+                        <form method="post" class="mt-4">
+                            {% csrf_token %}
+                            <div class="form-group">
+                                <label for="action" class="form-label">Take Action:</label>
+                                <select class="form-control" id="action" name="action">
+                                    <option value="delete">Delete Post</option>
+                                    <option value="ignore">Ignore Report</option>
+                                </select>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
