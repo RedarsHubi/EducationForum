@@ -681,4 +681,101 @@ def inbox_messages(request):
         ]
     })
 
+@user_passes_test(is_moderator)
+def reported_posts(request):
+    """
+    Display all reported posts and threads for moderators.
 
+    Args:
+        request: The HTTP request object.
+
+    Returns:
+        Rendered HTML page with context containing reported posts and threads.
+    """
+    reported_posts = Post.objects.filter(reports__isnull=False).exclude(id=1).distinct()
+    reported_threads = Thread.objects.filter(reports__isnull=False).exclude(id=1).distinct()
+    context = {
+        'reported_posts': reported_posts,
+        'reported_threads': reported_threads,
+    }
+    return render(request, 'reported_posts.html', context)
+
+@user_passes_test(is_moderator)
+def handle_report(request, report_id):
+    """
+    Handle individual reports. Moderators can choose to delete the reported content or ignore the report.
+
+    Args:
+        request: The HTTP request object.
+        report_id: The ID of the report to handle.
+
+    Returns:
+        Redirects to reported_posts view after handling, or renders a page to handle the report.
+    """
+    report = get_object_or_404(Report, id=report_id)
+    
+    if request.method == 'POST':
+        action = request.POST.get('action')
+        if action == 'delete':
+            if report.post.id == 1:
+                report.thread.delete()
+            else:
+                report.post.delete()
+            messages.success(request, 'Post deleted successfully.')
+        elif action == 'ignore':
+            report.delete()
+            messages.success(request, 'Report ignored.')
+        return redirect('reported_posts')
+    
+    context = {
+        'report': report,
+    }
+    return render(request, 'handle_report.html', context)
+    
+
+def report_post(request, post_id):
+    """
+    Allow authenticated users to report a post.
+
+    Args:
+        request: The HTTP request object.
+        post_id: The ID of the post to report.
+
+    Returns:
+        Redirects to the thread page after submitting the report or displaying an error message.
+    """
+    if request.method == 'POST' and request.user.is_authenticated:
+        post = get_object_or_404(Post, id=post_id)
+        reason = request.POST.get('reason')
+        details = request.POST.get('details', '')
+
+        Report.objects.create(post=post, reported_by=request.user, reason=reason, details=details)
+        messages.success(request, 'Report submitted successfully.')
+        return redirect(f'/thread_page/?thread={post.thread.id}')
+    else:
+        messages.error(request, 'You must be logged in to report.')
+        return redirect(f'/thread_page/?thread={post.thread.id}')
+
+
+def report_thread(request, thread_id):
+    """
+    Allow authenticated users to report a thread.
+
+    Args:
+        request: The HTTP request object.
+        thread_id: The ID of the thread to report.
+
+    Returns:
+        Redirects to the thread page after submitting the report or displaying an error message.
+    """
+    if request.method == 'POST' and request.user.is_authenticated:
+        thread = get_object_or_404(Thread, id=thread_id)
+        reason = request.POST.get('reason')
+        details = request.POST.get('details', '')
+
+        Report.objects.create(thread=thread, reported_by=request.user, reason=reason, details=details)
+        messages.success(request, 'Report submitted successfully.')
+        return redirect(f'/thread_page/?thread={thread.id}')
+    else:
+        messages.error(request, 'You must be logged in to report.')
+        return redirect(f'/thread_page/?thread={thread.id}')
