@@ -18,11 +18,11 @@
         <div class="inbox">
             <h1>Inbox</h1>
             <div class="conversation-list">
-                {% for sender, messages in messages.items %}
-                <div class="conversation-card" onclick="markConversationAsRead('{{ messages.0.sender.id  }}')">
+                {% for sender, user_messages in user_messages.items %}
+                <div class="conversation-card" onclick="markConversationAsRead('{{ user_messages.0.sender.id  }}')">
                         <h3>{{ sender }}</h3>
                         <div class="message-list">
-                            {% for message in messages|dictsort:"timestamp" %}
+                            {% for message in user_messages|dictsort:"timestamp" %}
                             <div
                                 class="message {% if message.sender == request.user %}sender{% else %}receiver{% endif %} {% if not message.is_read %}unread{% endif %}"
                                 data-message-id="{{ message.id }}"

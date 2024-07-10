@@ -1,6 +1,7 @@
 import json
 from channels.db import database_sync_to_async
 from channels.generic.websocket import AsyncWebsocketConsumer
+from channels.layers import get_channel_layer
 from app.views import update_unread_count
 from app.models import Message
 
@@ -11,6 +12,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
     async def connect(self):
         self.room_name = "chat_room"
         self.room_group_name = f'chat_{self.room_name}'
+        self.channel_layer = get_channel_layer()
 
         # Join the chat room group
         await self.channel_layer.group_add(

@@ -60,6 +60,7 @@ urlpatterns = [
     path('handle_report/<int:report_id>/', views.handle_report, name='handle_report'),
     path('thread_page/<int:post_id>/', views.thread_page, name='thread_page'),
     path('report_thread/<int:thread_id>/', views.report_thread, name='report_thread'),
+     path('update_unread_count/', views.update_unread_count, name='update_unread_count'),
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

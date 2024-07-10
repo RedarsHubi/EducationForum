@@ -558,21 +558,21 @@ def inbox(request, message_id=None):
     sent_messages = Message.objects.filter(sender=request.user).order_by('-timestamp')
     
     # Organize messages by sender/receiver for display
-    messages = {}
+    user_messages = {}
     for message in received_messages:
         sender_name = message.sender.name
-        if sender_name not in messages:
-            messages[sender_name] = []
-        messages[sender_name].append(message)
+        if sender_name not in user_messages:
+            user_messages[sender_name] = []
+        user_messages[sender_name].append(message)
     
     for message in sent_messages:
         receiver_name = message.receiver.name
-        if receiver_name not in messages:
-            messages[receiver_name] = []
-        messages[receiver_name].append(message)
+        if receiver_name not in user_messages:
+            user_messages[receiver_name] = []
+        user_messages[receiver_name].append(message)
     
     # Sort conversations by the most recent message
-    sorted_messages = sorted(messages.items(), key=lambda x: max(x[1], key=lambda y: y.timestamp).timestamp, reverse=True)
+    sorted_messages = sorted(user_messages.items(), key=lambda x: max(x[1], key=lambda y: y.timestamp).timestamp, reverse=True)
     sorted_messages = OrderedDict(sorted_messages)
     # Prepare form for sending messages
     original_message = None
@@ -599,12 +599,13 @@ def inbox(request, message_id=None):
 
             # Update conversation thread in messages dictionary
             receiver_name = receiver.name
-            if receiver_name not in messages:
-                messages[receiver_name] = []
-            messages[receiver_name].append(message)
+            if receiver_name not in user_messages:
+                user_messages[receiver_name] = []
+            user_messages[receiver_name].append(message)
 
-            django_messages.success(request, 'Message sent successfully.')
+            messages.success(request, 'Message sent successfully.')
             return redirect('inbox')
+
 
     # Exclude the logged-in user from the list of users to send messages to
     users = CustomUser.objects.exclude(id=request.user.id)
@@ -613,7 +614,7 @@ def inbox(request, message_id=None):
         'form': form,
         'users': users,
         'original_message': original_message,
-        'messages': sorted_messages,
+        'user_messages': sorted_messages,
         'unread_counts': unread_counts,
         'user': request.user,
     })
