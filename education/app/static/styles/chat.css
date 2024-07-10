@@ -1,0 +1,126 @@
+/* Chat Styles */
+.chat-box {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 1000;
+  perspective: 800px; /* Add perspective for 3D effects */
+}
+
+.chat-toggle-button {
+  border: none;
+  background: linear-gradient(45deg, #4a90e2, #357abd);
+  color: white;
+  border-radius: 50%;
+  padding: 15px;
+  cursor: pointer;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2), 0 8px 16px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease-in-out;
+  transform-style: preserve-3d; /* Ensure 3D effects are applied correctly */
+}
+
+.chat-toggle-button:hover {
+  background: linear-gradient(45deg, #357abd, #4a90e2);
+  transform: scale(1.1) rotateY(10deg); /* Add rotation on hover */
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3), 0 16px 32px rgba(0, 0, 0, 0.3);
+}
+
+.chat-window {
+  border: none;
+  border-radius: 20px;
+  background-color: #f8f9fa;
+  padding: 20px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2), 0 16px 32px rgba(0, 0, 0, 0.2);
+  max-height: 400px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  max-width: 500px;
+  width: auto;
+  overflow-x: hidden;
+  word-wrap: break-word;
+  backdrop-filter: blur(10px); /* Add a blur effect to the background */
+  transform-style: preserve-3d; /* Ensure 3D effects are applied correctly */
+  animation: chat-window-entrance 0.5s ease-in-out; /* Add entrance animation */
+}
+
+@keyframes chat-window-entrance {
+  0% {
+      opacity: 0;
+      transform: translateY(50px) rotateX(-20deg);
+  }
+  100% {
+      opacity: 1;
+      transform: translateY(0) rotateX(0);
+  }
+}
+
+.chat-messages {
+  flex-grow: 1;
+  overflow-y: auto;
+  padding-bottom: 10px;
+  overflow-x: hidden;
+  word-wrap: break-word;
+}
+
+.chat-message {
+  margin-bottom: 10px;
+  word-wrap: break-word;
+  background-color: #e9ebee;
+  border-radius: 10px;
+  padding: 8px 12px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease-in-out;
+}
+
+.chat-message:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.chat-input-container {
+  display: flex;
+  margin-top: 10px;
+}
+
+.chat-input {
+  flex-grow: 1;
+  padding: 10px;
+  border: 2px solid transparent;
+  border-radius: 10px;
+  margin-right: 10px;
+  overflow-x: hidden;
+  word-wrap: break-word;
+  background-color: rgba(255, 255, 255, 0.8);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease-in-out;
+}
+
+.chat-input:focus {
+  outline: none;
+  border: 2px solid #357abd;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.send-chat-button {
+  border: none;
+  background: linear-gradient(45deg, #4a90e2, #357abd);
+  color: white;
+  border-radius: 10px;
+  padding: 10px 20px;
+  cursor: pointer;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease-in-out;
+  transform-style: preserve-3d; /* Ensure 3D effects are applied correctly */
+}
+
+.send-chat-button:hover {
+  background: linear-gradient(45deg, #357abd, #4a90e2);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.send-chat-button:active {
+  transform: translateY(2px);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
