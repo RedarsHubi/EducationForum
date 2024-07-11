@@ -44,29 +44,52 @@ function markConversationAsRead(senderId) {
 }
 
 function markMessageAsRead(messageId) {
+    // Get the CSRF token from the cookie
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+    const csrftoken = getCookie('csrftoken');
+
     fetch(`/mark_as_read/${messageId}/`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
-            'X-CSRFToken': '{{ csrf_token }}'
+            'X-CSRFToken': csrftoken
         },
         body: JSON.stringify({})
     })
     .then(response => {
-        if (response.ok) {
-            console.log('Message marked as read successfully.');
-            // Update the UI to indicate the message has been read
-            const messageElement = document.querySelector(`.message[data-message-id="${messageId}"]`);
+        if (!response.ok) {
+            return response.text().then(text => { throw new Error(text) });
+        }
+        return response.json();
+    })
+    .then(data => {
+        console.log('Message marked as read successfully:', data);
+        // Update the UI to indicate the message has been read
+        const messageElement = document.querySelector(`.message[data-message-id="${messageId}"]`);
+        if (messageElement) {
             messageElement.classList.remove('unread');
-            updateUnreadCount();
+        }
+        updateUnreadCount();
 
-            // Notify the server that the message has been read
+        // Notify the server that the message has been read
+        if (webSocket && webSocket.readyState === WebSocket.OPEN) {
             webSocket.send(JSON.stringify({
                 'type': 'mark_as_read',
                 'message_id': messageId
             }));
-        } else {
-            console.error('Failed to mark message as read.');
         }
     })
     .catch(error => {

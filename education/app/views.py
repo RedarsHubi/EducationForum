@@ -11,7 +11,7 @@ from django.urls import reverse
 import json
 from datetime import date, timedelta
 from django.http import JsonResponse, HttpResponse, StreamingHttpResponse
-from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.csrf import csrf_exempt, ensure_csrf_cookie,  csrf_protect
 from django.views.decorators.http import require_POST
 from collections import OrderedDict
 from asgiref.sync import async_to_sync
@@ -534,6 +534,7 @@ def get_categories(request):
 
 
 @login_required
+@ensure_csrf_cookie
 def inbox(request, message_id=None):
     # Fetch unread message count
     if request.user.is_authenticated:
@@ -636,6 +637,8 @@ def update_unread_count(request):
         return JsonResponse({'unread_count': unread_count})
     return JsonResponse({'error': 'Invalid request method'}, status=400)
 
+@require_POST
+@csrf_protect
 def mark_as_read(request, message_id):
     print("mark_as_read view called")
     if request.method == 'POST':
