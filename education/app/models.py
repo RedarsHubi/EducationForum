@@ -200,8 +200,8 @@ class Report(models.Model):
         ('violence', 'Violence or Threats'),
         ('self_harm', 'Self-Harm or Suicide'),
     ]
-    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='reports', default=1)
-    thread = models.ForeignKey(Thread, on_delete=models.CASCADE, related_name='reports', default=1)
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='reports', default=4)
+    thread = models.ForeignKey(Thread, on_delete=models.CASCADE, related_name='reports', default=4)
     reported_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     reason = models.CharField(max_length=50, choices=REASON_CHOICES)
     details = models.TextField(blank=True, null=True)

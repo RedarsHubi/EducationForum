@@ -19,7 +19,7 @@ a:hover {
     font-size: 20px;
     border-radius: 20px;
     padding: 20px; /* Add some padding for a nicer look */
-    background: linear-gradient(to left, #473bd0, #81a2a2, #59597d, #735aca);
+    background: linear-gradient(to left, #9795b0, #cfd437, #e0922c, #dcd5f5);
     background-size: 200% 200%; /* Increase the gradient size */
     animation: gradient-fade 10s ease infinite;
   }

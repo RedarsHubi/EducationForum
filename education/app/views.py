@@ -715,8 +715,8 @@ def reported_posts(request):
     Returns:
         Rendered HTML page with context containing reported posts and threads.
     """
-    reported_posts = Post.objects.filter(reports__isnull=False).exclude(id=1).distinct()
-    reported_threads = Thread.objects.filter(reports__isnull=False).exclude(id=1).distinct()
+    reported_posts = Post.objects.filter(reports__isnull=False).exclude(id=4).distinct()
+    reported_threads = Thread.objects.filter(reports__isnull=False).exclude(id=4).distinct()
     context = {
         'reported_posts': reported_posts,
         'reported_threads': reported_threads,
@@ -740,7 +740,7 @@ def handle_report(request, report_id):
     if request.method == 'POST':
         action = request.POST.get('action')
         if action == 'delete':
-            if report.post.id == 1:
+            if report.post.id == 4:
                 report.thread.delete()
             else:
                 report.post.delete()

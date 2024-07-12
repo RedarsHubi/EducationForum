@@ -79,15 +79,10 @@ WSGI_APPLICATION = 'education.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'forum',      # Name of your MySQL database
-        'USER': 'redars',     # MySQL username
-        'PASSWORD': 'GonKillua05!', # MySQL password
-        'HOST': 'localhost',               # MySQL host (usually 'localhost')
-        'PORT': '3306',                    # MySQL port (usually '3306')
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
-
 
 
 # Password validation
