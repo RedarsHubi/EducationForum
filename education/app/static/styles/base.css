@@ -6,12 +6,12 @@ body, header, nav, ul, li, p {
 }
 
 body {
-  background: linear-gradient(135deg, #2d2b66, #1e90ff, #2d2b66);
+  background: radial-gradient(circle, #db7777, #ffc802fc);
 }
 
 /* Style the header */
 header {
-  background: linear-gradient(135deg, #2d2b66, #1e90ff, #2d2b66);
+  background: linear-gradient(45deg,  #523636, #ffc802fc);
   padding: 20px;
   display: flex;
   justify-content: space-between;

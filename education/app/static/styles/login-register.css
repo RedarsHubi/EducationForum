@@ -48,7 +48,7 @@
     transform: scale(1.1);
   }
   75% {
-    text-shadow: 0 0 2px #edc5c5, 0 0 4px #edc5c5, 0 0 6px #edc5c5, 0 0 8px #edc5c5, 0 0 10px #edc5c5, 0 0 12px #edc5c5;
+    text-shadow: 0 0 2px #430606, 0 0 4px #edc5c5, 0 0 6px #edc5c5, 0 0 8px #edc5c5, 0 0 10px #edc5c5, 0 0 12px #edc5c5;
     opacity: 0.8;
   }
 }
@@ -97,8 +97,8 @@
 .login-form .main-button, .register-button {
   width: 100%;
   padding: 10px;
-  background-color: #fbc31e;
-  color: black;
+  background-color: #1666ac;
+  color: rgb(255, 255, 255);
   border: none;
   border-radius: 10px;
   font-size: 16px;
@@ -107,7 +107,7 @@
 }
 
 .login-form .main-button:hover, .register-button:hover {
-  background-color: #cca01c;
+  background-color: #7193f7;
 }
 
 /* Register alerts */
@@ -141,12 +141,12 @@
 }
 
 .register-link a {
-  color: #fbc31e;
+  color: #1f306d;
   text-decoration: none;
   font-weight: 600;
   transition: color 0.3s ease;
 }
 
 .register-link a:hover {
-  color: #cca01c;
+  color: #4853b9;
 }

@@ -2,8 +2,8 @@
 const canvas = document.getElementById('background-canvas');
 const ctx = canvas.getContext('2d');
 const particles = [];
-const particleCount = 500;
-const particleSize = 2;
+const particleCount = 3000;
+const particleSize = 1;
 const particleSpeed = 1;
 
 // Door Functionality

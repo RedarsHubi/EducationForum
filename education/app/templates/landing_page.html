@@ -1,0 +1,40 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Philosophy Forum</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'styles/landing.css' %}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Sail&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
+</head>
+<body>
+    <div class="landing-page">
+        <div>
+          <h1>Education Forum</h1>
+          <p>Dare to question the boundaries of your thoughts and channel the conscious side of the human experience.</p>
+            <div class="door-container">
+                <a href="{% url 'login' %}" class="door left">
+                    <i class="fas fa-door-open"></i>
+                    <span>Log In</span>
+                </a>
+                <a href="{% url 'register' %}" class="door right">
+                    <i class="fas fa-door-open"></i>
+                    <span>Register</span>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <canvas id="background-canvas"></canvas>
+
+    <script src="{% static 'scripts/landing.js' %}"></script>
+</body>
+</html>

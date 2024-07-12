@@ -8,7 +8,7 @@
 
 /* Section Styles */
 .section {
-  background-color: white;
+  background: linear-gradient(45deg,  #f1eaea, #e8cf77fc);
   padding: 30px;
   border-radius: 20px;
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);

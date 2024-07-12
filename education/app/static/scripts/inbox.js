@@ -175,7 +175,7 @@ function isElementInViewport(element) {
 let checkForNewMessagesInterval;
 
 function startCheckingForNewMessages() {
-    checkForNewMessagesInterval = setInterval(checkForNewMessages, 20000);
+    checkForNewMessagesInterval = setInterval(checkForNewMessages, 2000);
 }
 
 function stopCheckingForNewMessages() {
