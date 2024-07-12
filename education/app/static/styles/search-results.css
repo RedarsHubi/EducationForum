@@ -5,7 +5,7 @@
     max-width: 1200px;
     margin: 40px auto;
     padding: 40px;
-    background-color: #569bfc5a;
+    background-color: #fcde565a;
     border-radius: 20px;
     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
     position: relative;
@@ -15,7 +15,7 @@
   .search-header {
     text-align: center;
     font-size: 36px;
-    color: #000d6f;
+    color: #000000;
     margin-bottom: 40px;
     position: relative;
     z-index: 1;
@@ -35,6 +35,7 @@
   }
   
   .results-title {
+    text-align: center;
     font-size: 28px;
     color: #000d6f;
     margin-bottom: 20px;
