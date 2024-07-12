@@ -6,7 +6,7 @@
  max-width: 1200px;
  margin: 40px auto;
  padding: 40px;
- background: linear-gradient(135deg, #2d2b66, #1e90ff, #2d2b66);
+ background: radial-gradient(circle, #db7777, #ffc802fc);
  border-radius: 20px;
  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.5);
 }
@@ -14,11 +14,7 @@
 .inbox-container h1 {
   font-size: 32px;
   margin-bottom: 20px;
-  background: linear-gradient(180deg, #ffffff, #ff913e);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  color: transparent;
+  color: white;
 }
 
 /* Inbox Styles */
@@ -41,7 +37,7 @@
 }
 
 .conversation-card {
- background: linear-gradient(226deg, #025d70, #000000e3, #2821f0, #07e7213d, #ffdb0394, #81808d);
+ background: linear-gradient(226deg, white, rgb(255, 179, 0));
  border-radius: 20px;
  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
  padding: 20px;
@@ -88,7 +84,7 @@
  top: 0;
  left: 0;
  right: 0;
- background: radial-gradient(circle at center, #0e1013, #615e5e);
+ background: linear-gradient(226deg, white, rgb(255, 179, 0));
  border-radius: 20px;
  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
  padding: 20px;
@@ -138,7 +134,7 @@
   padding: 20px;
   display: flex;
   flex-direction: column;
-  background: linear-gradient(39deg, #025d70, #000000e3, #2821f0, #07e7213d, #ffdb0394, #81808d);
+  background: linear-gradient(226deg, white, rgb(255, 179, 0));
   transition: background 0.5s ease-in-out;
   animation: fadeInUp 0.5s ease;
 }
@@ -163,18 +159,17 @@
 #id_receiver option {
   font-family: Arial, sans-serif; /* Specify font family */
   font-size: 14px; /* Specify font size */
-  color: #333; /* Specify font color */
-  background-color: #fff; /* Specify background color */
-}
+  color: #333; /* Specify font color */}
 
 .send-btn {
-  display: block;
-  background-color: #fbf12f;
+  max-width: 200px;
+  position: relative;
+  left: 260px;
+  background-color: #ff9900;
   color: black;
-  transition: background-color 0.3s, border-color 0.3s;
-  padding: 12px 20px;
+  padding: 10px 10px;
   font-size: 16px;
-  border-radius: 10px;
+  border-radius: 5px;
 }
 
 .send-btn:hover {
